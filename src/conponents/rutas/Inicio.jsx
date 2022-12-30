@@ -1,16 +1,21 @@
 import { Header } from "../extras/Header";
-import Formulario from "./Inicio/Formulario";
-import Tabla from "./Inicio/Tabla";
-
+import Formulario from './../extras/useFormulario'
 
 export const Inicio = () => {
+
+  const inputs = [
+    {label: "Nombre", name: "nombre", required: true, id: "floatingName"},
+    {label: "Edad", name: "edad", required: true, id: "floatingAge"},
+    {select:true, label: "Direccion", name: "direccion", required: true, id: "floatingAdress", 
+    options: [{id: 1, name: "Mantila"}, {id: 2, name: "Calzada"}]},
+  ]
+
   return (
     <>
       <Header title="Inicio" />
-      <hr />
       <div className="row contenido justify-content-between">
-        <Formulario />
-        <Tabla />
+        <Formulario data={inputs} />
+        {/* <Tabla /> */}
       </div>
       
     </>
