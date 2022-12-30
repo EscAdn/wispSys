@@ -226,10 +226,10 @@ body {
 .contenido {
   position: relative;
   background: var(--fondo);
-  /*min-height: 97vh;*/
+  /* min-height: 97vh; */
   top: 0;
-  left: 70px;
-  width: calc(100% - 73px);
+  left: 60px;
+  width: calc(100% - 70px);
   transition: all 0.5s ease;
   z-index: 2;
 }
