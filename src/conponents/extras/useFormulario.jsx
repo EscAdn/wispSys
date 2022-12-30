@@ -1,7 +1,7 @@
 import {useForm} from 'react-hook-form'
 import { Input, Select } from './Input'
 
-const Formulario = ({title="Registro", data}) => {
+const Formulario = ({title="Registro", data, limpiar=true}) => {
 
     const {register, handleSubmit} = useForm()
 
@@ -27,7 +27,14 @@ const Formulario = ({title="Registro", data}) => {
                             <Input key={e.id} type={e.type?e.type:"text"} register={register} label={e.label} name={e.name} required={e.required} id={e.id} />)
                     }
                 </div>
-                <button className='btn btn-primary'>Enviar</button>
+                <div className="container">
+                    <button className='btn btn-wisp'><i className='fas fa-save'></i>&nbsp;Enviar</button>
+                    &nbsp;
+                    {
+                        limpiar?(
+                        <a className='btn btn-wisp'><i className='fas fa-broom'></i>&nbsp;Limpiar</a>):''
+                    }
+                </div>
             </form>
         </div>
     )
