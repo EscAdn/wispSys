@@ -1,16 +1,15 @@
 import { Outlet } from "react-router-dom";
-import { LateralMenu } from './conponents/LateralMenu/LateralMenu'
+import { LateralMenu } from "./conponents/LateralMenu/LateralMenu";
 
 function App() {
-
   return (
     <>
-      <LateralMenu/>
+      <LateralMenu />
       <section className="contenido">
         <Outlet />
       </section>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
