@@ -15,15 +15,17 @@ export const Configuracion = () => {
   let api = helperHttp();
   let url = "";
   useEffect(() => {
-    api.get(url).then((res) => {
-      if (!res.err) {
-        setDb(res);
-        setError(null);
-      } else {
-        setDb([]);
-        setError(res);
-      }
-    });
+    helperHttp()
+      .get(url)
+      .then((res) => {
+        if (!res.err) {
+          setDb(res);
+          setError(null);
+        } else {
+          setDb([]);
+          setError(res);
+        }
+      });
   }, []);
 
   // Nuevo registro
