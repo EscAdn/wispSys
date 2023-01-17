@@ -1,67 +1,119 @@
-import { useEffect, useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Header } from "../extras/Header";
-import Formulario from "../extras/useFormulario";
-import FilterTable from "../extras/FilterTable";
-import Tabla from "./Clientes/Tabla";
+import Form from "./Clientes/Form";
+import TableClients from "./Clientes/TablaClients";
+import { formatoFecha } from "./../../helpers/helpDate";
 
-const url = "https://jsonplaceholder.typicode.com/";
-const inputs = [
-  { label: "Nombre", name: "nombre", required: true, id: "floatingName" },
-  {
-    label: "Telefono",
-    name: "telefono",
-    required: true,
-    id: "floatingTelefono",
-  },
-  {
-    select: true,
-    label: "Direccion",
-    name: "direccion",
-    required: true,
-    id: "floatingAdress",
-    options: [
-      { id: 1, name: "Mantila" },
-      { id: 2, name: "Calzada 1ra" },
-      { id: 3, name: "Calzada 2da" },
-      { id: 4, name: "2da del 11" },
-      { id: 5, name: "5 de Mayo" },
-      { id: 6, name: "Bellota" },
-    ],
-  },
-  {
-    label: "Fecha de Registro",
-    name: "fecha",
-    type: "date",
-    required: true,
-    id: "floatingFecha",
-  },
-];
+const url = "http://localhost:3020/api/client";
 
-export const Clientes = () => {
-  const [clients, setClients] = useState([]);
+const Clientes = () => {
+  const [db, setDb] = useState([]);
   const [address, setAddress] = useState([]);
+  const [dataToEdit, setDataToEdit] = useState(null);
+  const [error, setError] = useState(null);
 
-  const getClients = async () => {
-    let res = await fetch(url).then((r) => r.json());
+  const getAddresses = async (url) => {
+    try {
+      await axios.get(url).then((res) => {
+        if (!res.err && res.data.length > 0) {
+          setAddress(res.data);
+        } else {
+          setAddress([]);
+        }
+      });
+    } catch (error) {
+      setError(error);
+    }
+  };
 
-    await setClients(...clients, res);
+  const getClients = async (url) => {
+    try {
+      await axios.get(url).then((res) => {
+        if (!res.err && res.data.length > 0) {
+          setDb(res.data);
+          setError(null);
+        } else {
+          setDb([]);
+          res.err
+            ? setError(res)
+            : setError({ error: "Probelmas al obtener datos :(" });
+        }
+      });
+    } catch (error) {
+      setError(error);
+    }
   };
 
   useEffect(() => {
-    getClients(url + "users");
-    // getAddress(url + "address");
+    getAddresses("http://localhost:3020/api/address");
+    getClients(url);
   }, []);
+
+  const createData = async (data) => {
+    delete data.id;
+    let fecha = formatoFecha(new Date(), "yyyy/mm/dd");
+    data.created_at = fecha;
+    data.updated_at = fecha;
+
+    let { name, telephone, address_id, created_at, updated_at } = data;
+
+    let res = await axios
+      .post(url, {
+        name,
+        telephone,
+        address_id,
+        created_at,
+        updated_at,
+      })
+      .then((res) => res);
+
+    if (res.status !== 200) return;
+
+    data.address = data.address_id;
+    data.id = res.data.insertId;
+    setDb([...db, data]);
+  };
+
+  const updateData = async (data) => {
+    data.updated_at = formatoFecha(new Date(), "yyyy/mm/dd");
+
+    let { name, telephone, address_id, updated_at } = data;
+
+    let res = await axios
+      .put(`${url}/${data.id}`, {
+        name,
+        telephone,
+        address_id,
+        updated_at,
+      })
+      .then((res) => res);
+
+    if (res.status !== 200) return;
+
+    let newData = db.map((el) => (el.id === data.id ? data : el));
+    setDb(newData);
+  };
 
   return (
     <>
       <Header title="Clientes" />
-      <div className="row container justify-content-between">
-        <Formulario data={inputs} />
-        <div className="col-sm-12 col-md-8 card p-3">
-          <FilterTable />
-          <Tabla data={clients} />
+      <div className="conatiner row">
+        <div className="col-sm-12 col-md-4 card p-2">
+          <Form
+            createData={createData}
+            updateData={updateData}
+            dataToEdit={dataToEdit}
+            setDataToEdit={setDataToEdit}
+            address={address}
+          />
+        </div>
+        <div className="col-sm-12 col-md-8 card p-2">
+          <TableClients data={db} setDataToEdit={setDataToEdit} />
         </div>
       </div>
     </>
   );
 };
+
+export default Clientes;
