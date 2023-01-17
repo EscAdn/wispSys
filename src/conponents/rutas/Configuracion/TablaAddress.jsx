@@ -1,6 +1,6 @@
 import React from "react";
 
-export const TablaAddress = ({ data, setDataToEdit, deleteData }) => {
+export const TablaAddress = ({ data, setDataToEdit, deleteData, er }) => {
   return (
     <>
       <div className="mt-4 col-12 p-2 h-max scroll overflow-auto">
@@ -11,8 +11,7 @@ export const TablaAddress = ({ data, setDataToEdit, deleteData }) => {
           <thead>
             <tr className="bg-personalizado">
               <th scope="col">#</th>
-              <th scope="col">Tecnologia</th>
-              <th scope="col">Sitio Web</th>
+              <th scope="col">Dirección/Zona</th>
               <th scope="col">Opciones</th>
             </tr>
           </thead>
@@ -29,8 +28,7 @@ export const TablaAddress = ({ data, setDataToEdit, deleteData }) => {
               data.map((e) => (
                 <tr key={e.id}>
                   <td>{e.id}</td>
-                  <td>{e.name}</td>
-                  <td>{e.url}</td>
+                  <td>{e.address}</td>
                   <td>
                     <button
                       className="btn btn-sm btn-outline-wisp"

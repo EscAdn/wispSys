@@ -1,13 +1,13 @@
 export const helperHttp = () => {
   const custonFetch = (endpoint, options) => {
-    const defaultHeader = { accept: "aplication/json" };
+    // const defaultHeader = { accept: "aplication/json" };
 
     const controller = new AbortController();
     options.signal = controller.signal;
     options.method = options.method || "GET";
-    options.headers = options.headers
-      ? { ...defaultHeader, ...options.headers }
-      : defaultHeader;
+    // options.headers = options.headers
+    //   ? { ...defaultHeader, ...options.headers }
+    //   : defaultHeader;
 
     options.body = JSON.stringify(options.body) || false;
     if (!options.body) delete options.body;

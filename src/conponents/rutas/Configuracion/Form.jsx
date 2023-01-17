@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const initialForm = { id: null, name: "", url: "" };
+const initialForm = { id: null, address: "" };
 
 export const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
   const [form, setForm] = useState(initialForm);
@@ -23,7 +23,7 @@ export const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!form.name || !form.url) {
+    if (!form.address) {
       alert("Sin datos...");
       return;
     }
@@ -55,26 +55,15 @@ export const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
             <div className="form-floating mb-3">
               <input
                 type="text"
+                autoComplete="off"
                 className="form-control"
                 id="floatingAddress"
                 placeholder="Direccion"
                 onChange={handleChange}
-                value={form.name}
-                name="name"
+                value={form.address}
+                name="address"
               />
-              <label htmlFor="floatingAddress">Tegnlogia</label>
-            </div>
-            <div className="form-floating mb-3">
-              <input
-                name="url"
-                type="text"
-                className="form-control"
-                id="floatingUrl"
-                placeholder="Url"
-                onChange={handleChange}
-                value={form.url}
-              />
-              <label htmlFor="floatingUrl">URL</label>
+              <label htmlFor="floatingAddress">Dirección/Zona</label>
             </div>
           </div>
           <div className="container-fluit">
