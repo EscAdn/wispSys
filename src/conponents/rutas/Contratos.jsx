@@ -110,9 +110,61 @@ const Contratos = () => {
     console.log(db);
   };
 
-  const updateData = () => {};
+  const updateData = async (data) => {
+    data.updated_at = formatoFecha(new Date(), "yyyy/mm/dd");
+    data.client_id = parseInt(data.client_id);
+    data.plan_id = parseInt(data.plan_id);
 
-  const deleteData = () => {};
+    let {
+      client_id,
+      plan_id,
+      server_id,
+      state,
+      ip,
+      netmask,
+      mac_address,
+      details,
+      updated_at,
+    } = data;
+
+    let resp = await axios.put(`${url}contract/${data.id}`, {
+      client_id,
+      plan_id,
+      server_id,
+      state,
+      ip,
+      netmask,
+      mac_address,
+      details,
+      updated_at,
+    });
+
+    if (resp.status !== 200) return;
+
+    let planData = plans.filter((el) => el.id === data.plan_id);
+
+    data.plan = planData[0].name;
+    data.price = planData[0].price;
+
+    let newData = db.map((el) => (el.id === data.id ? data : el));
+    console.log(data, newData);
+    setDb(newData);
+  };
+
+  const deleteData = async (id) => {
+    let isConfirm = window.confirm("¿Desea eliminar al id " + id + "?");
+
+    if (isConfirm) {
+      let resp = await axios.delete(`${url}contract/${id}`);
+
+      if (resp.status !== 200) return;
+
+      let newData = db.filter((el) => el.id !== id);
+      setDb(newData);
+    } else {
+      return;
+    }
+  };
 
   return (
     <>
