@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { helpHttp } from "../../helpers/helpHttp";
+import { urls } from "../../utils/endpoints";
+
 import Card from "../extras/Card";
 import { Header } from "../extras/Header";
 import Layout from "../extras/Layout";
 import Message from "../extras/Message";
 import Addresses from "./Configuracion/Addresses";
 import Nodes from "./Configuracion/Nodes";
-
-const url = "http://localhost:3020/api/";
 
 const Configuracion = () => {
   const [db, setDb] = useState([]);
@@ -17,7 +17,7 @@ const Configuracion = () => {
   useEffect(() => {
     // Obteniendo las direcciones para el Select
     const getAddress = async () => {
-      const resp = await helpHttp().get(`${url}address`);
+      const resp = await helpHttp().get(urls.url_address);
       if (resp.err) {
         setError(resp);
         setDb([]);
@@ -28,7 +28,15 @@ const Configuracion = () => {
     };
 
     getAddress();
-  }, [url]);
+  }, []);
+
+  if (error) {
+    return (
+      <Card>
+        <Message msg={`${error.status} - ${error.statusText}`} />
+      </Card>
+    );
+  }
 
   return (
     <>
@@ -37,7 +45,7 @@ const Configuracion = () => {
         <Card md="col-md-5">
           <h6 className="text-center fw-bold">Direcciones/Zonas</h6>
           <Addresses
-            url={`${url}address`}
+            url={urls.url_address}
             db={db}
             setDb={setDb}
             dataToEdit={dataToEdit}
@@ -48,7 +56,7 @@ const Configuracion = () => {
         </Card>
         <Card md="col-md-7">
           <h6 className="text-center fw-bold">Nodos/Cajas</h6>
-          <Nodes url={`${url}node`} address={db} />
+          <Nodes url={urls.url_nodes} address={db} />
         </Card>
       </Layout>
     </>

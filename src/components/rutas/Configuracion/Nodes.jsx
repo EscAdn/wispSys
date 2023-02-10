@@ -12,7 +12,7 @@ const Nodes = ({ url, address }) => {
 
   const getNodes = async (url) => {
     const resp = await helpHttp().get(url);
-    if (resp.message) {
+    if (resp.err) {
       setError(resp);
       setDb([]);
     } else {
@@ -98,9 +98,9 @@ const Nodes = ({ url, address }) => {
 
   if (error) {
     return (
-      <Card>
+      <div className="mt-4 p-5">
         <Message msg={`${error.status} - ${error.statusText}`} />
-      </Card>
+      </div>
     );
   }
 

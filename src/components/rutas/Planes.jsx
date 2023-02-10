@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { helpHttp } from "../../helpers/helpHttp";
+import { urls } from "../../utils/endpoints";
+
 import { formatoFecha } from "../../helpers/helpDate";
 import { Header } from "../extras/Header";
 import Form from "./Planes/Form";
@@ -8,15 +10,13 @@ import Layout from "../extras/Layout";
 import Card from "../extras/Card";
 import Message from "../extras/Message";
 
-const url = "http://localhost:3020/api/plan";
-
 const Planes = () => {
   const [db, setDb] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [error, setError] = useState(null);
 
   const getPlans = async () => {
-    let resp = await helpHttp().get(url);
+    let resp = await helpHttp().get(urls.url_plans);
     if (resp.err) {
       setError(resp);
       setDb([]);
@@ -28,7 +28,7 @@ const Planes = () => {
 
   useEffect(() => {
     getPlans();
-  }, [url]);
+  }, []);
 
   const createData = async (data) => {
     delete data.id;
@@ -39,7 +39,7 @@ const Planes = () => {
     let { name, ceil_down_mbps, ceil_up_mbps, price, created_at, updated_at } =
       data;
 
-    let res = await helpHttp().post(url, {
+    let res = await helpHttp().post(urls.url_plans, {
       body: {
         name,
         ceil_down_mbps,
@@ -66,7 +66,7 @@ const Planes = () => {
     let { name, ceil_down_mbps, ceil_up_mbps, price, updated_at } = data;
 
     let res = await helpHttp()
-      .put(`${url}/${data.id}`, {
+      .put(`${urls.url_plans}/${data.id}`, {
         body: {
           name,
           ceil_down_mbps,
