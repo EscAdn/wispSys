@@ -226,7 +226,6 @@ body {
 .contenido {
   position: relative;
   background: var(--fondo);
-  /* min-height: 97vh; */
   top: 0;
   left: 60px;
   width: calc(100% - 70px);

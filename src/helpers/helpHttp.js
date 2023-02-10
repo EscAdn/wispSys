@@ -1,30 +1,34 @@
-export const helperHttp = () => {
+export const helpHttp = () => {
   const custonFetch = (endpoint, options) => {
-    // const defaultHeader = { accept: "aplication/json" };
+    const defaultHeader = {
+      accept: "application/json",
+    };
 
     const controller = new AbortController();
     options.signal = controller.signal;
+
     options.method = options.method || "GET";
-    // options.headers = options.headers
-    //   ? { ...defaultHeader, ...options.headers }
-    //   : defaultHeader;
+    options.headers = options.headers
+      ? { ...defaultHeader, ...options.headers }
+      : defaultHeader;
 
     options.body = JSON.stringify(options.body) || false;
     if (!options.body) delete options.body;
 
-    setTimeout(() => controller.abort(), 5000);
+    //console.log(options);
+    setTimeout(() => controller.abort(), 3000);
 
     return fetch(endpoint, options)
       .then((res) =>
-        res.ok
+        res.status === 200
           ? res.json()
           : Promise.reject({
               err: true,
               status: res.status || "00",
-              statusText: res.statusText || "Ocurrio un error",
+              statusText: res.statusText || "Ocurrió un error",
             })
       )
-      .catch((error) => error);
+      .catch((err) => err);
   };
 
   const get = (url, options = {}) => custonFetch(url, options);

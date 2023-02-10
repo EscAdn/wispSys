@@ -1,13 +1,14 @@
 import { Outlet } from "react-router-dom";
-import { LateralMenu } from "./conponents/LateralMenu/LateralMenu";
+import Container from "./components/extras/Container";
+import { LateralMenu } from "./components/LateralMenu/LateralMenu";
 
 function App() {
   return (
     <>
       <LateralMenu />
-      <section className="contenido">
+      <Container>
         <Outlet />
-      </section>
+      </Container>
     </>
   );
 }
