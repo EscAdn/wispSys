@@ -1,5 +1,5 @@
 import React from "react";
-import { Header } from "../extras/Header";
+import Header from "../extras/Header";
 
 const Gastos = () => {
   return (

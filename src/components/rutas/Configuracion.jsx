@@ -7,8 +7,8 @@ import Card from "../extras/Card";
 import Header from "../extras/Header";
 import Layout from "../extras/Layout";
 import Message from "../extras/Message";
-import Addresses from "Configuracion/Addresses";
-import Nodes from "Configuracion/Nodes";
+import Addresses from "./Configuracion/Addresses";
+import Nodes from "./Configuracion/Nodes";
 
 const Configuracion = () => {
   const [db, setDb] = useState([]);

@@ -5,8 +5,8 @@ import { helpHttp } from "../../helpers/helpHttp";
 import { urls } from "../../utils/endpoints";
 
 import Header from "../../components/extras/Header";
-import Form from "Contratos/Form";
-import Table from "Contratos/Table";
+import Form from "./Contratos/Form";
+import Table from "./Contratos/Table";
 import Message from "../extras/Message";
 
 const Contratos = () => {

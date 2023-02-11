@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { helpHttp } from "../../helpers/helpHttp";
-import { Header } from "../extras/Header";
+import Header from "../extras/Header";
 import Invoices from "./Invoices";
 import Layout from "./../extras/Layout";
 import Card from "./../extras/Card";

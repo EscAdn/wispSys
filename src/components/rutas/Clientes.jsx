@@ -7,8 +7,8 @@ import { urls } from "../../utils/endpoints";
 import Card from "../extras/Card";
 import Header from "../extras/Header";
 import Layout from "../extras/Layout";
-import Form from "Clientes/Form";
-import Table from "Clientes/Table";
+import Form from "./Clientes/Form";
+import Table from "./Clientes/Table";
 import Message from "../extras/Message";
 
 const urlAddress = urls.url_address;
