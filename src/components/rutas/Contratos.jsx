@@ -1,12 +1,13 @@
-import { Header } from "../extras/Header";
 import { useEffect, useState } from "react";
-import Form from "./Contratos/Form";
+
 import { formatoFecha } from "../../helpers/helpDate";
 import { helpHttp } from "../../helpers/helpHttp";
-import Table from "./Contratos/Table";
-import Message from "../extras/Message";
+import { urls } from "../../utils/endpoints";
 
-const url = "http://localhost:3020/api/";
+import Header from "../../components/extras/Header";
+import Form from "Contratos/Form";
+import Table from "Contratos/Table";
+import Message from "../extras/Message";
 
 const Contratos = () => {
   const [db, setDb] = useState([]);
@@ -30,9 +31,9 @@ const Contratos = () => {
   };
 
   useEffect(() => {
-    getHttp(`${url}contract`, setDb, setErrorDb);
-    getHttp(`${url}client`, setClients, setErrorClients);
-    getHttp(`${url}plan`, setPlans, setErrorPlans);
+    getHttp(urls.url_contracts, setDb, setErrorDb);
+    getHttp(urls.url_clients, setClients, setErrorClients);
+    getHttp(urls.url_plans, setPlans, setErrorPlans);
   }, []);
 
   const createData = async (data) => {

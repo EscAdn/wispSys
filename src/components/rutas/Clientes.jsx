@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
+
 import { formatoFecha } from "../../helpers/helpDate";
 import { helpHttp } from "../../helpers/helpHttp";
+import { urls } from "../../utils/endpoints";
+
 import Card from "../extras/Card";
-import { Header } from "../extras/Header";
+import Header from "../extras/Header";
 import Layout from "../extras/Layout";
-import Form from "./Clientes/Form";
-import Table from "./Clientes/Table";
+import Form from "Clientes/Form";
+import Table from "Clientes/Table";
 import Message from "../extras/Message";
 
-const urlAddress = "http://localhost:3020/api/address";
-const url = "http://localhost:3020/api/client";
+const urlAddress = urls.url_address;
+const url = urls.url_clients;
 
 const Clientes = () => {
   const [db, setDb] = useState([]);

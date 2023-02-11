@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+
 import { helpHttp } from "../../helpers/helpHttp";
 import { urls } from "../../utils/endpoints";
-
 import { formatoFecha } from "../../helpers/helpDate";
-import { Header } from "../extras/Header";
-import Form from "./Planes/Form";
-import Table from "./Planes/Table";
+
+import Header from "../extras/Header";
+import Form from "Planes/Form";
+import Table from "Planes/Table";
 import Layout from "../extras/Layout";
 import Card from "../extras/Card";
 import Message from "../extras/Message";
