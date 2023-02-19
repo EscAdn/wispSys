@@ -31,6 +31,7 @@ const Table = () => {
                 <button
                   className="btn btn-sm btn-outline-wisp"
                   onClick={() => {}}
+                  title="Pagar"
                 >
                   <i className="fas fa-dollar"></i>
                 </button>
@@ -38,6 +39,7 @@ const Table = () => {
                 <button
                   className="btn btn-sm btn-outline-wisp"
                   onClick={() => {}}
+                  title="Anular"
                 >
                   <i className="fas fa-warning"></i>
                 </button>

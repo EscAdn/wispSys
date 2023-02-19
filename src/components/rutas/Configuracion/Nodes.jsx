@@ -28,15 +28,12 @@ const Nodes = ({ url, address }) => {
   // Nuevo registro
   const createData = async (data) => {
     delete data.id;
-    let fecha = formatoFecha(new Date(), "yyyy/mm/dd");
     data.address_id = parseInt(data.address_id);
-    data.created_at = fecha;
-    data.updated_at = fecha;
 
-    let { address_id, details, ports, created_at, updated_at } = data;
+    let { address_id, details, ports } = data;
 
     let res = await helpHttp().post(url, {
-      body: { address_id, details, ports, created_at, updated_at },
+      body: { address_id, details, ports },
       headers: { "content-type": "application/json" },
     });
 
@@ -56,13 +53,10 @@ const Nodes = ({ url, address }) => {
 
   // Editar registro
   const updateData = async (data) => {
-    let fecha = formatoFecha(new Date(), "yyyy/mm/dd");
-    data.updated_at = fecha;
-
-    let { address_id, details, ports, updated_at } = data;
+    let { address_id, details, ports } = data;
 
     let res = await helpHttp().put(`${url}/${data.id}`, {
-      body: { address_id, details, ports, updated_at },
+      body: { address_id, details, ports },
       headers: { "content-type": "application/json" },
     });
 

@@ -33,12 +33,8 @@ const Planes = () => {
 
   const createData = async (data) => {
     delete data.id;
-    let fecha = formatoFecha(new Date(), "yyyy/mm/dd");
-    data.created_at = fecha;
-    data.updated_at = fecha;
 
-    let { name, ceil_down_mbps, ceil_up_mbps, price, created_at, updated_at } =
-      data;
+    let { name, ceil_down_mbps, ceil_up_mbps, price } = data;
 
     let res = await helpHttp().post(urls.url_plans, {
       body: {
@@ -46,8 +42,6 @@ const Planes = () => {
         ceil_down_mbps,
         ceil_up_mbps,
         price,
-        created_at,
-        updated_at,
       },
       headers: { "content-type": "application/json" },
     });
@@ -62,9 +56,7 @@ const Planes = () => {
   };
 
   const updateData = async (data) => {
-    data.updated_at = formatoFecha(new Date(), "yyyy/mm/dd");
-
-    let { name, ceil_down_mbps, ceil_up_mbps, price, updated_at } = data;
+    let { name, ceil_down_mbps, ceil_up_mbps, price } = data;
 
     let res = await helpHttp()
       .put(`${urls.url_plans}/${data.id}`, {
@@ -73,7 +65,6 @@ const Planes = () => {
           ceil_down_mbps,
           ceil_up_mbps,
           price,
-          updated_at,
         },
         headers: {
           "content-type": "application/json",

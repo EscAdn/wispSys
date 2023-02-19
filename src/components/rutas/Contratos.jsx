@@ -8,6 +8,8 @@ import Header from "../../components/extras/Header";
 import Form from "./Contratos/Form";
 import Table from "./Contratos/Table";
 import Message from "../extras/Message";
+import Layout from "../extras/Layout";
+import Card from "../extras/Card";
 
 const Contratos = () => {
   const [db, setDb] = useState([]);
@@ -40,21 +42,8 @@ const Contratos = () => {
     delete data.id;
     delete data.node_id;
 
-    let fecha = formatoFecha(new Date(), "yyyy/mm/dd");
-    data.created_at = fecha;
-    data.updated_at = fecha;
-
-    let {
-      client_id,
-      plan_id,
-      server_id,
-      ip,
-      netmask,
-      mac_address,
-      details,
-      created_at,
-      updated_at,
-    } = data;
+    let { client_id, plan_id, server_id, ip, netmask, mac_address, details } =
+      data;
 
     let res = await helpHttp().post(`${url}contract`, {
       body: {
@@ -65,8 +54,6 @@ const Contratos = () => {
         netmask,
         mac_address,
         details,
-        created_at,
-        updated_at,
       },
       headers: { "content-type": "application/json" },
     });
@@ -89,7 +76,6 @@ const Contratos = () => {
   };
 
   const updateData = async (data) => {
-    data.updated_at = formatoFecha(new Date(), "yyyy/mm/dd");
     data.client_id = parseInt(data.client_id);
     data.plan_id = parseInt(data.plan_id);
 
@@ -102,7 +88,6 @@ const Contratos = () => {
       netmask,
       mac_address,
       details,
-      updated_at,
     } = data;
 
     let resp = await helpHttp().put(`${url}contract/${data.id}`, {
@@ -115,7 +100,6 @@ const Contratos = () => {
         netmask,
         mac_address,
         details,
-        updated_at,
       },
       headers: { "content-type": "application/json" },
     });
@@ -152,6 +136,22 @@ const Contratos = () => {
     }
   };
 
+  const generateInvoice = async (id, created_invoice) => {
+    let from = formatoFecha(new Date(), "yyyy/mm/dd");
+
+    // contract_id, from
+
+    // Obtener la fecha con el día dado
+    console.log(id, from, created_invoice);
+
+    // let resp = await helpHttp().post(urls.url_invoices);
+    // if (resp.status !== 200) {
+    //   console.log("Error al generar factura");
+    // } else {
+    //   console.log("Factura generada");
+    // }
+  };
+
   if (errorDb || errorClients || errorPlans) {
     return (
       <div className="mt-4 p-5">
@@ -177,8 +177,8 @@ const Contratos = () => {
   return (
     <>
       <Header title="Contratos" />
-      <div className="conatiner row">
-        <div className="col-sm-12 col-md-4 card p-2">
+      <Layout>
+        <Card md="col-md-3">
           <Form
             createData={createData}
             updateData={updateData}
@@ -187,15 +187,16 @@ const Contratos = () => {
             clients={clients}
             plans={plans}
           />
-        </div>
-        <div className="col-sm-12 col-md-8 card p-2">
+        </Card>
+        <Card md="col-md-9">
           <Table
             data={db}
             setDataToEdit={setDataToEdit}
             deleteData={deleteData}
+            generateInvoice={generateInvoice}
           />
-        </div>
-      </div>
+        </Card>
+      </Layout>
     </>
   );
 };

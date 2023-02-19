@@ -19,9 +19,6 @@ const Addresses = ({
   const createData = async (data) => {
     delete data.id;
     data.address = data.name;
-    let fecha = formatoFecha(new Date(), "yyyy/mm/dd");
-    data.created_at = fecha;
-    data.updated_at = fecha;
 
     // address, created_at, updated_at;
     let res = await helpHttp().post(url, {
@@ -45,10 +42,10 @@ const Addresses = ({
     data.updated_at = fecha;
     data.address = data.name;
 
-    let { address, updated_at } = data;
+    let { address } = data;
 
     let resp = await helpHttp().put(`${url}/${data.id}`, {
-      body: { address, updated_at },
+      body: { address },
       headers: { "content-type": "application/json" },
     });
 

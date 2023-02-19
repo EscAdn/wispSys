@@ -1,6 +1,6 @@
 import React from "react";
 
-const Table = ({ data, setDataToEdit, deleteData }) => {
+const Table = ({ data, setDataToEdit, deleteData, generateInvoice }) => {
   return (
     <div className="mt-1 col-12 p-2 h-max scroll overflow-auto">
       <div className="card-header bg-white col-12">
@@ -60,17 +60,40 @@ const Table = ({ data, setDataToEdit, deleteData }) => {
                   <div className="btn-group" role="group">
                     <button
                       className="btn btn-sm btn-outline-wisp"
+                      title="Editar"
                       onClick={() => setDataToEdit(e)}
                     >
                       <i className="fas fa-pen-to-square"></i>
                     </button>
                     <button
                       className="btn btn-sm btn-outline-wisp"
+                      title="Ping"
+                      onClick={(e) => alert("Ping", e)}
+                    >
+                      <i className="fas fa-check-double"></i>
+                    </button>
+                    <button
+                      className="btn btn-sm btn-outline-wisp"
+                      title="Eliminar"
                       onClick={() => deleteData(e.id)}
                     >
                       <i className="fas fa-trash"></i>
                     </button>
-                    <div className="btn-group">
+                    <button
+                      className="btn btn-sm btn-outline-wisp"
+                      title="Facturar"
+                      onClick={() => generateInvoice(e.id, e.created_invoice)}
+                    >
+                      <i className="fas fa-file-invoice-dollar"></i>
+                    </button>
+                    <button
+                      className="btn btn-sm btn-outline-wisp"
+                      title="Promesa de Pago"
+                      onClick={() => alert("Promesa de pago", e.id)}
+                    >
+                      <i className="fas fa-calendar"></i>
+                    </button>
+                    {/* <div className="btn-group">
                       <button
                         className="btn btn-sm btn-outline-wisp"
                         data-bs-toggle="dropdown"
@@ -80,22 +103,24 @@ const Table = ({ data, setDataToEdit, deleteData }) => {
                       </button>
                       <ul className="dropdown-menu">
                         <li>
-                          <a className="dropdown-item" href="#">
-                            Status
+                          <a className="dropdown-item btn">Status</a>
+                        </li>
+                        <li>
+                          <a
+                            className="dropdown-item btn"
+                            onClick={() => generateInvoice(e)}
+                          >
+                            Facturar
                           </a>
                         </li>
                         <li>
-                          <a className="dropdown-item" href="#">
-                            Ping
-                          </a>
+                          <a className="dropdown-item btn">Ping</a>
                         </li>
                         <li>
-                          <a className="dropdown-item" href="#">
-                            Promise
-                          </a>
+                          <a className="dropdown-item btn">Promise</a>
                         </li>
                       </ul>
-                    </div>
+                    </div> */}
                   </div>
                 </td>
               </tr>

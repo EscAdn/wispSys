@@ -52,9 +52,6 @@ const Clientes = () => {
   const createData = async (data) => {
     delete data.id;
     data.address_id = parseInt(data.address_id);
-    let fecha = formatoFecha(new Date(), "yyyy/mm/dd");
-    data.created_at = fecha;
-    data.updated_at = fecha;
 
     let resp = await helpHttp().post(url, {
       body: data,
@@ -74,9 +71,6 @@ const Clientes = () => {
   };
 
   const updateData = async (data) => {
-    data.updated_at - formatoFecha(new Date(), "yyyy/mm/dd");
-    data.address_id = parseInt(data.address_id);
-
     const { name, telephone, address_id, updated_at } = data;
 
     let resp = await helpHttp().put(`${url}/${data.id}`, {
