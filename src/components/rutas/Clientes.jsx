@@ -20,6 +20,7 @@ const Clientes = () => {
   const [errorDb, setErrorDb] = useState(null);
   const [errorAddress, setErrorAddress] = useState(null);
   const [address, setAddress] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     // Obteniendo las direcciones para el Select
@@ -71,6 +72,9 @@ const Clientes = () => {
   };
 
   const updateData = async (data) => {
+    data.id = parseInt(data.id);
+    data.address_id = parseInt(data.address_id);
+
     const { name, telephone, address_id, updated_at } = data;
 
     let resp = await helpHttp().put(`${url}/${data.id}`, {
@@ -95,11 +99,11 @@ const Clientes = () => {
     if (isConfirm) {
       let resp = await helpHttp().del(`${url}/${id}`);
 
-      if (typeof resp == "string") {
+      if (!resp.affectedRows) {
         setError({ err: "El Cliente tiene un Contrato activo" });
         return;
       }
-
+      console.log(typeof resp);
       if (resp.err) {
         // setError(resp);
         console.log(resp);
@@ -134,6 +138,11 @@ const Clientes = () => {
   return (
     <>
       <Header title="Clientes" />
+      {error && (
+        <div className="mt-1">
+          <Message msg={error.err} />
+        </div>
+      )}
       <Layout>
         <Card md="col-md-4">
           <Form

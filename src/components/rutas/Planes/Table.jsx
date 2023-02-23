@@ -28,9 +28,17 @@ const Table = ({ data, setDataToEdit }) => {
           ) : (
             data.map((e) => (
               <tr key={e.id}>
-                <td>{e.name}</td>
-                <td>{e.ceil_up_mbps}</td>
-                <td>{e.ceil_down_mbps}</td>
+                <td className="fw-bold">{e.name}</td>
+                <td>
+                  <i className="text-success fas fa-cloud-arrow-up"></i>
+                  &nbsp;
+                  {e.ceil_up_mbps} Mbps
+                </td>
+                <td>
+                  <i className="text-danger fas fa-cloud-arrow-down"></i>
+                  &nbsp;
+                  {e.ceil_down_mbps} Mbps
+                </td>
                 <td>$ {e.price} MNX</td>
                 <td>
                   <button

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Table = ({ data, setDataToEdit, deleteData }) => {
+const Table = ({ data, setDataToEdit }) => {
   return (
     <>
       <div className="card-header bg-white col-12">
@@ -39,22 +39,9 @@ const Table = ({ data, setDataToEdit, deleteData }) => {
                 <td>
                   <button
                     className="btn btn-sm btn-outline-wisp"
-                    onClick={() =>
-                      setDataToEdit({
-                        id: e.id,
-                        address_id: e.address_id,
-                        details: e.details,
-                        ports: e.ports,
-                      })
-                    }
+                    onClick={() => setDataToEdit(e)}
                   >
                     <i className="fas fa-pen-to-square"></i>
-                  </button>
-                  <button
-                    className="btn btn-sm btn-outline-wisp"
-                    onClick={() => deleteData(e.id)}
-                  >
-                    <i className="fas fa-trash"></i>
                   </button>
                 </td>
               </tr>

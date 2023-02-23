@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import { helpHttp } from "../../helpers/helpHttp";
 import { urls } from "../../utils/endpoints";
-import { formatoFecha } from "../../helpers/helpDate";
 
 import Header from "../extras/Header";
 import Form from "./Planes/Form";
@@ -56,6 +55,8 @@ const Planes = () => {
   };
 
   const updateData = async (data) => {
+    data.id = parseInt(data.id);
+
     let { name, ceil_down_mbps, ceil_up_mbps, price } = data;
 
     let res = await helpHttp()

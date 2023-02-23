@@ -53,6 +53,9 @@ const Nodes = ({ url, address }) => {
 
   // Editar registro
   const updateData = async (data) => {
+    data.address_id = parseInt(data.address_id);
+    data.ports = parseInt(data.ports);
+
     let { address_id, details, ports } = data;
 
     let res = await helpHttp().put(`${url}/${data.id}`, {
@@ -61,33 +64,15 @@ const Nodes = ({ url, address }) => {
     });
 
     if (res.err) {
-      setError(res);
+      // setError(res);
+      console.log(res);
       return;
     }
+
+    data.address = address.find((x) => x.id === data.address_id).name;
 
     let newData = db.map((el) => (el.id === data.id ? data : el));
     setDb(newData);
-  };
-
-  // Eliminar registro
-  const deleteData = async (id) => {
-    let isConfirm = window.confirm("¿Desea eliminar al id " + id + "?");
-
-    if (isConfirm) {
-      let resp = await helpHttp()
-        .del(`${url}/${id}`)
-        .then((resp) => resp);
-
-      if (resp.err) {
-        setError(res);
-        return;
-      }
-
-      let newData = db.filter((el) => el.id !== id);
-      setDb(newData);
-    } else {
-      return;
-    }
   };
 
   if (error) {
@@ -108,11 +93,7 @@ const Nodes = ({ url, address }) => {
         setDataToEdit={setDataToEdit}
       />
       <div className="bg-white col-sm-12 p-3">
-        <TablaNodes
-          data={db}
-          setDataToEdit={setDataToEdit}
-          deleteData={deleteData}
-        />
+        <TablaNodes data={db} setDataToEdit={setDataToEdit} />
       </div>
     </div>
   );
