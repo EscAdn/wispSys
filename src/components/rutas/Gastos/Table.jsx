@@ -1,16 +1,16 @@
 import React from "react";
 
-const Tabla = ({ data }) => {
+const Table = ({ data }) => {
   return (
     <div className="mt-4 col-12 p-2 h-max scroll overflow-auto">
-      <table className="table table-responsive table-hover shadow p-3 mb-5 bg-body">
+      <table className="table table-responsive table-hover shadow p-3 mb-3 bg-body">
         <thead>
           <tr className="bg-personalizado">
-            <th scope="col">#</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Teléfono</th>
-            <th scope="col">Direccíon</th>
-            <th scope="col">Registro</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Ingreso</th>
+            <th scope="col">Egreso</th>
+            <th scope="col">Concepto</th>
             <th scope="col">Opciones</th>
           </tr>
         </thead>
@@ -26,11 +26,11 @@ const Tabla = ({ data }) => {
           ) : (
             data.map((e) => (
               <tr key={e.id}>
-                <td>{e.id}</td>
-                <td>{e.name}</td>
-                <td>{e.telephpne}</td>
-                <td>{e.address_id}</td>
-                <td>{e.created_at}</td>
+                <td>{e.created_at.substring(0, 10)}</td>
+                <td>{e.client_name}</td>
+                <td>{e.amount_incomes}</td>
+                <td>{e.amount_discharge}</td>
+                <td>{e.concept}</td>
                 <td>
                   <button id="ver" className="btn btn-sm btn-outline-wisp">
                     <i className="fas fa-eye"></i>
@@ -48,4 +48,4 @@ const Tabla = ({ data }) => {
   );
 };
 
-export default Tabla;
+export default Table;

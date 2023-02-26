@@ -28,7 +28,7 @@ const Clientes = () => {
       const resp = await helpHttp().get(urlAddress);
       if (resp.err) {
         setErrorAddress(resp);
-        setDb([]);
+        setAddress([]);
       } else {
         setErrorAddress(null);
         setAddress(resp);
