@@ -1,25 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
+// Helpers
 import { helpHttp } from "../../helpers/helpHttp";
 import { urls } from "../../utils/endpoints";
 
+// Components
 import Header from "../extras/Header";
 import Form from "./Planes/Form";
 import Table from "./Planes/Table";
 import Layout from "../extras/Layout";
 import Card from "../extras/Card";
 import Message from "../extras/Message";
+import Loading from "../extras/Loading";
 
 const Planes = () => {
-  const [db, setDb] = useState([]);
+  const [db, setDb] = useState(null);
   const [dataToEdit, setDataToEdit] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
 
   const getPlans = async () => {
     let resp = await helpHttp().get(urls.url_plans);
     if (resp.err) {
       setError(resp);
-      setDb([]);
+      setDb(null);
     } else {
       setError(null);
       setDb(resp);
@@ -84,28 +87,32 @@ const Planes = () => {
 
   if (error) {
     return (
-      <div className="mt-4 p-4">
+      <Card>
         <Message msg={`${error.status} - ${error.statusText}`} />
-      </div>
+      </Card>
     );
   }
 
   return (
     <>
       <Header title="Planes" />
-      <Layout>
-        <Card md="col-md-5">
-          <Form
-            createData={createData}
-            updateData={updateData}
-            dataToEdit={dataToEdit}
-            setDataToEdit={setDataToEdit}
-          />
-        </Card>
-        <Card md="col-md-7">
-          <Table data={db} error={error} setDataToEdit={setDataToEdit} />
-        </Card>
-      </Layout>
+      {db ? (
+        <Layout>
+          <Card md="col-md-5">
+            <Form
+              createData={createData}
+              updateData={updateData}
+              dataToEdit={dataToEdit}
+              setDataToEdit={setDataToEdit}
+            />
+          </Card>
+          <Card md="col-md-7">
+            <Table data={db} error={error} setDataToEdit={setDataToEdit} />
+          </Card>
+        </Layout>
+      ) : (
+        <Loading />
+      )}
     </>
   );
 };

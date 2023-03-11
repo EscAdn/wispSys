@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
-import Form from "./nodes/Form";
-import { formatoFecha } from "./../../../helpers/helpDate";
-import TablaNodes from "./nodes/Table";
+import { useEffect, useState } from "react";
+
+// Helpers
 import { helpHttp } from "../../../helpers/helpHttp";
+
+// Components
+import Form from "./nodes/Form";
+import TablaNodes from "./nodes/Table";
 import Message from "../../extras/Message";
+import Card from "../../extras/Card";
+import Loading from "../../extras/Loading";
 
 const Nodes = ({ url, address }) => {
-  const [db, setDb] = useState([]);
+  const [db, setDb] = useState(null);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [error, setError] = useState(null);
 
@@ -14,7 +19,7 @@ const Nodes = ({ url, address }) => {
     const resp = await helpHttp().get(url);
     if (resp.err) {
       setError(resp);
-      setDb([]);
+      setDb(null);
     } else {
       setError(null);
       setDb(resp);
@@ -77,25 +82,31 @@ const Nodes = ({ url, address }) => {
 
   if (error) {
     return (
-      <div className="mt-4 p-5">
+      <Card>
         <Message msg={`${error.status} - ${error.statusText}`} />
-      </div>
+      </Card>
     );
   }
 
   return (
-    <div className="col-12 h-max scroll overflow-auto">
-      <Form
-        address={address}
-        createData={createData}
-        updateData={updateData}
-        dataToEdit={dataToEdit}
-        setDataToEdit={setDataToEdit}
-      />
-      <div className="bg-white col-sm-12 p-3">
-        <TablaNodes data={db} setDataToEdit={setDataToEdit} />
-      </div>
-    </div>
+    <>
+      {db ? (
+        <div className="col-12 h-max scroll overflow-auto">
+          <Form
+            address={address}
+            createData={createData}
+            updateData={updateData}
+            dataToEdit={dataToEdit}
+            setDataToEdit={setDataToEdit}
+          />
+          <div className="bg-white col-sm-12 p-3">
+            <TablaNodes data={db} setDataToEdit={setDataToEdit} />
+          </div>
+        </div>
+      ) : (
+        <Loading />
+      )}
+    </>
   );
 };
 

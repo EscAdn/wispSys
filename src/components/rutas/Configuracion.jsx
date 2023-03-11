@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
+// Helpers
 import { helpHttp } from "../../helpers/helpHttp";
 import { urls } from "../../utils/endpoints";
 
+// Components
 import Card from "../extras/Card";
 import Header from "../extras/Header";
 import Layout from "../extras/Layout";
-import Message from "../extras/Message";
 import Addresses from "./Configuracion/Addresses";
 import Nodes from "./Configuracion/Nodes";
 
 const Configuracion = () => {
-  const [db, setDb] = useState([]);
+  const [db, setDb] = useState(null);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [error, setError] = useState(null);
 
@@ -21,7 +22,7 @@ const Configuracion = () => {
       const resp = await helpHttp().get(urls.url_address);
       if (resp.err) {
         setError(resp);
-        setDb([]);
+        setDb(null);
       } else {
         setError(null);
         setDb(resp);
@@ -30,14 +31,6 @@ const Configuracion = () => {
 
     getAddress();
   }, []);
-
-  if (error) {
-    return (
-      <Card>
-        <Message msg={`${error.status} - ${error.statusText}`} />
-      </Card>
-    );
-  }
 
   return (
     <>
@@ -52,7 +45,6 @@ const Configuracion = () => {
             dataToEdit={dataToEdit}
             setDataToEdit={setDataToEdit}
             error={error}
-            setError={setError}
           />
         </Card>
         <Card md="col-md-7">

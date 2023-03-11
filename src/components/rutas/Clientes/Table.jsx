@@ -1,36 +1,26 @@
-import React from "react";
-
 const Table = ({ data, setDataToEdit, deleteData }) => {
   return (
-    <div className="mt-4 col-12 p-2 h-max scroll overflow-auto">
+    <>
       <div className="card-header bg-white col-12">
         <h5 className="fw-bold text-center">Clientes</h5>
       </div>
       <p className="text-end">
         Mostrando <b>{data && data.length}</b> Clientes
       </p>
-      <table className="table table-responsive table-hover shadow p-3 mb-2 bg-body">
-        <thead>
-          <tr className="bg-personalizado">
-            <th scope="col">#</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Teléfono</th>
-            <th scope="col">Dirección/Zona</th>
-            <th scope="col">Registro</th>
-            <th scope="col">Opciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {!data ? (
-            <tr className="text-center">
-              <td colSpan="6">
-                <div className="spinner-grow text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </td>
+      <div className="mt-0 col-12 p-2 h-max scroll overflow-auto">
+        <table className="table table-responsive table-hover shadow p-3 mb-2 bg-body">
+          <thead>
+            <tr className="bg-personalizado">
+              <th scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col">Dirección/Zona</th>
+              <th scope="col">Registro</th>
+              <th scope="col">Opciones</th>
             </tr>
-          ) : (
-            data.map((e) => (
+          </thead>
+          <tbody>
+            {data.map((e) => (
               <tr key={e.id}>
                 <td className="h6">{e.id}</td>
                 <td className="h6 fw-bold">{e.name}</td>
@@ -55,11 +45,11 @@ const Table = ({ data, setDataToEdit, deleteData }) => {
                   </button>
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 

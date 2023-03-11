@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { formatoFecha } from "../../helpers/helpDate";
-import { helpHttp } from "../../helpers/helpHttp";
-import { urls } from "../../utils/endpoints";
+// Helpers
+import { helpHttp } from "./../../helpers/helpHttp";
+import { urls } from "./../../utils/endpoints";
 
-import Card from "../extras/Card";
-import Header from "../extras/Header";
-import Layout from "../extras/Layout";
+// Components
+import Card from "./../extras/Card";
+import Header from "./../extras/Header";
+import Layout from "./../extras/Layout";
 import Form from "./Clientes/Form";
 import Table from "./Clientes/Table";
-import Message from "../extras/Message";
-
-const urlAddress = urls.url_address;
-const url = urls.url_clients;
+import Message from "./../extras/Message";
+import Loading from "./../extras/Loading";
 
 const Clientes = () => {
-  const [db, setDb] = useState([]);
+  const [db, setDb] = useState(null);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [errorDb, setErrorDb] = useState(null);
   const [errorAddress, setErrorAddress] = useState(null);
-  const [address, setAddress] = useState([]);
+  const [address, setAddress] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     // Obteniendo las direcciones para el Select
     const getAddress = async () => {
-      const resp = await helpHttp().get(urlAddress);
+      const resp = await helpHttp().get(urls.url_address);
       if (resp.err) {
         setErrorAddress(resp);
-        setAddress([]);
+        setAddress(null);
       } else {
         setErrorAddress(null);
         setAddress(resp);
@@ -36,7 +35,7 @@ const Clientes = () => {
     };
     // Obteniendo la lista de Clientes
     const getClients = async () => {
-      const resp = await helpHttp().get(url);
+      const resp = await helpHttp().get(urls.url_clients);
       if (resp.err) {
         setErrorDb(resp);
         setDb(null);
@@ -48,7 +47,7 @@ const Clientes = () => {
 
     getAddress();
     getClients();
-  }, [url]);
+  }, [urls.url_clients]);
 
   const createData = async (data) => {
     delete data.id;
@@ -77,7 +76,7 @@ const Clientes = () => {
 
     const { name, telephone, address_id, updated_at } = data;
 
-    let resp = await helpHttp().put(`${url}/${data.id}`, {
+    let resp = await helpHttp().put(`${urls.url_clients}/${data.id}`, {
       body: { name, telephone, address_id, updated_at },
       headers: { "content-type": "application/json" },
     });
@@ -97,7 +96,7 @@ const Clientes = () => {
     let isConfirm = window.confirm("¿Desea eliminar al id " + id + "?");
 
     if (isConfirm) {
-      let resp = await helpHttp().del(`${url}/${id}`);
+      let resp = await helpHttp().del(`${urls.url_clients}/${id}`);
 
       if (!resp.affectedRows) {
         setError({ err: "El Cliente tiene un Contrato activo" });
@@ -117,50 +116,46 @@ const Clientes = () => {
     }
   };
 
-  if (errorDb) {
+  if (errorDb || errorAddress) {
     return (
-      <div className="mt-4 p-5">
-        <Message msg={`Clients: ${errorDb.status} - ${errorDb.statusText}`} />
-      </div>
-    );
-  }
-
-  if (errorAddress) {
-    return (
-      <div className="mt-4 p-5">
-        <Message
-          msg={`Addresses: ${errorAddress.status} - ${errorAddress.statusText}`}
-        />
-      </div>
+      <Card>
+        {errorDb && (
+          <Message msg={`Clients: ${errorDb.status} - ${errorDb.statusText}`} />
+        )}
+        {errorAddress && (
+          <Message
+            msg={`Addresses: ${errorAddress.status} - ${errorAddress.statusText}`}
+          />
+        )}
+      </Card>
     );
   }
 
   return (
     <>
       <Header title="Clientes" />
-      {error && (
-        <div className="mt-1">
-          <Message msg={error.err} />
-        </div>
+      {db ? (
+        <Layout>
+          <Card md="col-md-4">
+            <Form
+              address={address}
+              createData={createData}
+              updateData={updateData}
+              dataToEdit={dataToEdit}
+              setDataToEdit={setDataToEdit}
+            />
+          </Card>
+          <Card md="col-md-8">
+            <Table
+              data={db}
+              setDataToEdit={setDataToEdit}
+              deleteData={deleteData}
+            />
+          </Card>
+        </Layout>
+      ) : (
+        <Loading />
       )}
-      <Layout>
-        <Card md="col-md-4">
-          <Form
-            address={address}
-            createData={createData}
-            updateData={updateData}
-            dataToEdit={dataToEdit}
-            setDataToEdit={setDataToEdit}
-          />
-        </Card>
-        <Card md="col-md-8">
-          <Table
-            data={db}
-            setDataToEdit={setDataToEdit}
-            deleteData={deleteData}
-          />
-        </Card>
-      </Layout>
     </>
   );
 };

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+
+// Components
 import ButtonsForm from "../../extras/ButtonsForm";
 import Input from "../../extras/Input";
 import Select from "../../extras/Select";

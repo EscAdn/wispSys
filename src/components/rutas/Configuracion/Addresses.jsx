@@ -1,20 +1,14 @@
-import React from "react";
-import { formatoFecha } from "../../../helpers/helpDate";
+// Helpers
 import { helpHttp } from "../../../helpers/helpHttp";
+
+// Components
 import Card from "../../extras/Card";
+import Loading from "../../extras/Loading";
 import Message from "../../extras/Message";
 import Form from "./address/Form";
 import Table from "./address/Table";
 
-const Addresses = ({
-  url,
-  db,
-  setDb,
-  dataToEdit,
-  setDataToEdit,
-  error,
-  setError,
-}) => {
+const Addresses = ({ url, db, setDb, dataToEdit, setDataToEdit, error }) => {
   // Nuevo registro
   const createData = async (data) => {
     delete data.id;
@@ -67,17 +61,23 @@ const Addresses = ({
   }
 
   return (
-    <div className="col-12 h-max scroll overflow-auto">
-      <Form
-        createData={createData}
-        updateData={updateData}
-        dataToEdit={dataToEdit}
-        setDataToEdit={setDataToEdit}
-      />
-      <div className="bg-white col-sm-12 p-3">
-        <Table data={db} setDataToEdit={setDataToEdit} />
-      </div>
-    </div>
+    <>
+      {db ? (
+        <div className="col-12 h-max scroll overflow-auto">
+          <Form
+            createData={createData}
+            updateData={updateData}
+            dataToEdit={dataToEdit}
+            setDataToEdit={setDataToEdit}
+          />
+          <div className="bg-white col-sm-12 p-3">
+            <Table data={db} setDataToEdit={setDataToEdit} />
+          </div>
+        </div>
+      ) : (
+        <Loading />
+      )}
+    </>
   );
 };
 

@@ -2,15 +2,7 @@ import React, { useState } from "react";
 import Message from "./Message";
 
 const Select = ({ data, col = "", label, ...rest }) => {
-  if (!data)
-    return (
-      <Message
-        msg={`Error Direcciones no cargadas - Recargue la página`}
-        bg="danger"
-      />
-    );
-
-  if (data.length === 0) {
+  if (!data) {
     return <Message msg={`${label} Error: No se encontraton datos`} />;
   }
 

@@ -28,7 +28,13 @@ export const helpHttp = () => {
               statusText: res.statusText || "Ocurrió un error",
             })
       )
-      .catch((err) => err);
+      .catch((err) => {
+        return {
+          err: true,
+          status: "00",
+          statusText: err.message || "Ocurrió un error inesperado",
+        };
+      });
   };
 
   const get = (url, options = {}) => custonFetch(url, options);

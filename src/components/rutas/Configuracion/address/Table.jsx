@@ -1,5 +1,3 @@
-import React from "react";
-
 const Table = ({ data, setDataToEdit }) => {
   return (
     <>
@@ -15,30 +13,20 @@ const Table = ({ data, setDataToEdit }) => {
           </tr>
         </thead>
         <tbody>
-          {data.length === 0 ? (
-            <tr className="text-center">
-              <td colSpan="4">
-                <div className="spinner-grow text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
+          {data.map((e) => (
+            <tr key={e.id}>
+              <td>{e.id}</td>
+              <td>{e.name}</td>
+              <td>
+                <button
+                  className="btn btn-sm btn-outline-wisp"
+                  onClick={() => setDataToEdit(e)}
+                >
+                  <i className="fas fa-pen-to-square"></i>
+                </button>
               </td>
             </tr>
-          ) : (
-            data.map((e) => (
-              <tr key={e.id}>
-                <td>{e.id}</td>
-                <td>{e.name}</td>
-                <td>
-                  <button
-                    className="btn btn-sm btn-outline-wisp"
-                    onClick={() => setDataToEdit(e)}
-                  >
-                    <i className="fas fa-pen-to-square"></i>
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
+          ))}
         </tbody>
       </table>
     </>

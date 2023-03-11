@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
+// Components
 import ButtonsForm from "../../extras/ButtonsForm";
 import Input from "../../extras/Input";
-import Message from "../../extras/Message";
 
 const initialForm = {
   id: null,

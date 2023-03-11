@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react";
 
-import { formatoFecha } from "../../helpers/helpDate";
+// Helpers
 import { helpHttp } from "../../helpers/helpHttp";
 import { urls } from "../../utils/endpoints";
 
+// COmponents
 import Header from "../../components/extras/Header";
 import Form from "./Contratos/Form";
 import Table from "./Contratos/Table";
 import Message from "../extras/Message";
 import Layout from "../extras/Layout";
 import Card from "../extras/Card";
+import Loading from "./../extras/Loading";
 
 const Contratos = () => {
-  const [db, setDb] = useState([]);
+  const [db, setDb] = useState(null);
   const [errorDb, setErrorDb] = useState(null);
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState(null);
   const [errorClients, setErrorClients] = useState(null);
-  const [plans, setPlans] = useState([]);
+  const [plans, setPlans] = useState(null);
   const [errorPlans, setErrorPlans] = useState(null);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [error, setError] = useState(null);
@@ -25,7 +27,7 @@ const Contratos = () => {
     let resp = await helpHttp().get(url);
     if (resp.err) {
       setError(resp);
-      setState([]);
+      setState(null);
     } else {
       setError(null);
       setState(resp);
@@ -45,7 +47,7 @@ const Contratos = () => {
     let { client_id, plan_id, server_id, ip, netmask, mac_address, details } =
       data;
 
-    let res = await helpHttp().post(`${url}contract`, {
+    let res = await helpHttp().post(urls.url_contracts, {
       body: {
         client_id,
         plan_id,
@@ -90,7 +92,7 @@ const Contratos = () => {
       details,
     } = data;
 
-    let resp = await helpHttp().put(`${url}contract/${data.id}`, {
+    let resp = await helpHttp().put(`${urls.url_contracts}/${data.id}`, {
       body: {
         client_id,
         plan_id,
@@ -122,7 +124,7 @@ const Contratos = () => {
     let isConfirm = window.confirm("¿Desea eliminar al id " + id + "?");
 
     if (isConfirm) {
-      let resp = await helpHttp().del(`${url}contract/${id}`);
+      let resp = await helpHttp().del(`${urls.url_contracts}/${id}`);
 
       if (resp.err) {
         setError(res);
@@ -137,24 +139,29 @@ const Contratos = () => {
   };
 
   const generateInvoice = async (id, created_invoice) => {
-    let from = formatoFecha(new Date(), "yyyy/mm/dd");
-
+    let data = {};
+    data.contract_id = parseInt(id);
+    // Obtener de un {input Date}
+    data.from = "2023-02-01";
+    // data.from = formatoFecha(new Date(), "yyyy/mm/dd");
     // contract_id, from
-
     // Obtener la fecha con el día dado
-    console.log(id, from, created_invoice);
+    console.log(data);
 
-    // let resp = await helpHttp().post(urls.url_invoices);
-    // if (resp.status !== 200) {
-    //   console.log("Error al generar factura");
-    // } else {
-    //   console.log("Factura generada");
-    // }
+    let resp = await helpHttp().post(urls.url_invoices, {
+      body: data,
+      headers: { "content-type": "application/json" },
+    });
+    if (resp.err) {
+      console.log("Error al generar factura ", resp);
+    } else {
+      console.log("Factura generada ", resp);
+    }
   };
 
   if (errorDb || errorClients || errorPlans) {
     return (
-      <div className="mt-4 p-5">
+      <Card>
         {errorDb && (
           <Message
             msg={`Contracts: ${errorDb.status} - ${errorDb.statusText}`}
@@ -170,33 +177,37 @@ const Contratos = () => {
             msg={`Plans: ${errorPlans.status} - ${errorPlans.statusText}`}
           />
         )}
-      </div>
+      </Card>
     );
   }
 
   return (
     <>
       <Header title="Contratos" />
-      <Layout>
-        <Card md="col-md-3">
-          <Form
-            createData={createData}
-            updateData={updateData}
-            dataToEdit={dataToEdit}
-            setDataToEdit={setDataToEdit}
-            clients={clients}
-            plans={plans}
-          />
-        </Card>
-        <Card md="col-md-9">
-          <Table
-            data={db}
-            setDataToEdit={setDataToEdit}
-            deleteData={deleteData}
-            generateInvoice={generateInvoice}
-          />
-        </Card>
-      </Layout>
+      {db && clients && plans ? (
+        <Layout>
+          <Card md="col-md-3">
+            <Form
+              createData={createData}
+              updateData={updateData}
+              dataToEdit={dataToEdit}
+              setDataToEdit={setDataToEdit}
+              clients={clients}
+              plans={plans}
+            />
+          </Card>
+          <Card md="col-md-9">
+            <Table
+              data={db}
+              setDataToEdit={setDataToEdit}
+              deleteData={deleteData}
+              generateInvoice={generateInvoice}
+            />
+          </Card>
+        </Layout>
+      ) : (
+        <Loading />
+      )}
     </>
   );
 };

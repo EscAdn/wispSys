@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import ButtonsForm from "../../extras/ButtonsForm";
 import Input from "../../extras/Input";
@@ -7,18 +7,30 @@ import Select from "../../extras/Select";
 const initialForm = {
   id: null,
   concept: "",
-  payment_type_id: null,
+  payment_type_id: 0,
   client_name: "",
   amount_incomes: 0,
   amount_discharge: 0,
 };
 
-const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
+const Form = ({
+  payments_types,
+  createData,
+  updateData,
+  dataToEdit,
+  setDataToEdit,
+}) => {
   const [form, setForm] = useState(initialForm);
 
-  const handleSubmit = () => {};
+  useEffect(() => {
+    if (dataToEdit) {
+      setForm(dataToEdit);
+    } else {
+      setForm(initialForm);
+    }
+  }, [dataToEdit]);
 
-  const handleChange = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (form.id === null) {
@@ -28,6 +40,13 @@ const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
     }
 
     handleReset(e);
+  };
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleReset = (e) => {
@@ -45,9 +64,9 @@ const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
         </h5>
         <div className="card-body">
           <Select
-            data={[]}
-            label="Cliente"
-            name="client_id"
+            data={payments_types}
+            label="Recibido por..."
+            name="payment_type_id"
             onChange={handleChange}
             value={form.payment_type_id}
           />
