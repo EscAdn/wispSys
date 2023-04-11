@@ -60,6 +60,8 @@ const Addresses = ({ url, db, setDb, dataToEdit, setDataToEdit, error }) => {
     );
   }
 
+  console.log("Address...");
+
   return (
     <>
       {db ? (

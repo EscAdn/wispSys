@@ -47,6 +47,8 @@ const Form = ({
     setDataToEdit(null);
   };
 
+  console.log("From Nod..");
+
   return (
     <>
       <div className="col-sm-12">

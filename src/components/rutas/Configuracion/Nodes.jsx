@@ -88,6 +88,7 @@ const Nodes = ({ url, address }) => {
     );
   }
 
+  console.log("Nodes...");
   return (
     <>
       {db ? (

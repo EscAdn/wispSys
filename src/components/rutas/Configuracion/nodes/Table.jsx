@@ -1,4 +1,5 @@
 const Table = ({ data, setDataToEdit }) => {
+  console.log("Table Node..");
   return (
     <>
       <div className="card-header bg-white col-12">

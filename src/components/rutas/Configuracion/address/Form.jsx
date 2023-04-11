@@ -41,6 +41,7 @@ const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
     setDataToEdit(null);
   };
 
+  console.log("From Add..");
   return (
     <>
       <div className="col-sm-12">
