@@ -24,16 +24,18 @@ const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    let resp = {};
+    
     if (form.id === null) {
-      createData(form);
+      resp = await createData(form);
     } else {
-      updateData(form);
+      resp = await updateData(form);
     }
+    
+    !resp && handleReset(e);
 
-    handleReset(e);
   };
 
   const handleReset = (e) => {
@@ -41,7 +43,6 @@ const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
     setDataToEdit(null);
   };
 
-  console.log("From Add..");
   return (
     <>
       <div className="col-sm-12">

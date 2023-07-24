@@ -1,16 +1,16 @@
 import React from "react";
 
-const ButtonsForm = ({ onClick, dataToEdit }) => {
+const ButtonsForm = ({ dataToEdit }) => {
   return (
     <div className="container-fluit">
-      <button className="btn btn-wisp">
+      <button className="btn btn-wisp" type="submit">
         <i className="fas fa-save"></i>&nbsp;
         {dataToEdit ? "Modificar" : "Registrar"}
       </button>
       &nbsp;
-      <a className="btn btn-wisp" onClick={onClick}>
+      <button className="btn btn-wisp" type="reset">
         <i className="fas fa-broom"></i>&nbsp;Limpiar
-      </a>
+      </button>
     </div>
   );
 };

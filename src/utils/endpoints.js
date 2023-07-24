@@ -1,4 +1,4 @@
-const url_base = "http://127.0.0.1:3001/api/";
+const url_base = "http://127.0.0.1:3000/api/";
 const url_address = url_base + "addresses";
 const url_nodes = url_base + "nodes";
 const url_clients = url_base + "clients";

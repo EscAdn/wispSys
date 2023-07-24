@@ -20,35 +20,41 @@ const Table = ({ data, setDataToEdit, deleteData, generateInvoice }) => {
           </thead>
           <tbody>
             {data.map((e) => (
-              <tr key={e.id} className="align-middle">
-                <td>{e.public_id}</td>
+              <tr key={e.id} className="align-start">
+                <td>{e.id}</td>
                 <td>
-                  <span className="col h6 fw-bold">{e.client}</span>
-                  <h5 className="col">
-                    <span className="badge text-primary">{e.address}</span>
-                  </h5>
-                  <span className="col badge text-primary">
-                    {e.created_at.substring(0, 10)} -{" "}
-                    {e.updated_at.substring(0, 10)}
-                  </span>
-                </td>
-                <td className="text-left">
-                  <span className="col fw-bold">{e.plan}</span>
-                  <h5 className="col">
-                    <span className="badge text-primary">$ {e.price} MNX</span>
-                  </h5>
-                </td>
-                <td className="text-left">
-                  <div className="col">
-                    <a
-                      className=""
-                      href={`https://${e.ip}:8090`}
-                      target="_blank"
-                    >
-                      {e.ip}
-                    </a>
+                  <div className="d-inline p-0 m-0">
+                    <span className="col h6 fw-bold">{e.client}</span>
+                    <h6>
+                      <p className="col badge text-primary">{e.address}</p>
+                      <span className="col badge text-primary">
+                        {e.created_at 
+                          ? `${e.created_at.substring(0, 10)} - ${e.updated_at.substring(0, 10)}` 
+                          : "Ahora"
+                        }
+                      </span>
+                    </h6>
                   </div>
-                  <div className="col">{e.mac_address}</div>
+                </td>
+                <td className="text-left">
+                  <div className="d-inline p-0 m-0">
+                    <span className="col fw-bold">{e.plan}</span>
+                    <h5>
+                      <p className="badge text-primary">$ {e.price} MNX</p>
+                    </h5>
+                  </div>
+                </td>
+                <td className="text-left">
+                  <div className="d-inline p-0 m-0">
+                    <span className="col fw-bold">
+                      <a className="" href={`https://${e.ip}:8090`} target="_blank">
+                        {e.ip}
+                      </a>
+                    </span>
+                    <h5>
+                      <div className="col">{e.mac_address}</div>
+                    </h5>
+                  </div>
                 </td>
                 <td>
                   <div className="btn-group" role="group">

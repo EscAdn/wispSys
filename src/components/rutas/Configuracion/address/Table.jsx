@@ -1,5 +1,5 @@
 const Table = ({ data, setDataToEdit }) => {
-  console.log("Table Add..");
+  
   return (
     <>
       <div className="card-header bg-white col-12">

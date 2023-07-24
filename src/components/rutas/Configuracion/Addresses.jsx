@@ -12,44 +12,45 @@ const Addresses = ({ url, db, setDb, dataToEdit, setDataToEdit, error }) => {
   // Nuevo registro
   const createData = async (data) => {
     delete data.id;
-    data.address = data.name;
 
-    let { address } = data;
+    let { name } = data;
 
     // address
     let res = await helpHttp().post(url, {
-      body: { address },
+      body: { name },
       headers: { "content-type": "application/json" },
     });
 
     if (res.err) {
       // setError(res);
-      console.log(resp);
-      return;
+      console.log(res);
+      return {err: res.err};
     }
 
     data.id = res.insertId;
     setDb([...db, data]);
+    return;
   };
 
   // Editar registro
   const updateData = async (data) => {
     data.id = parseInt(data.id);
-    let { address } = data;
-
-    let res = await helpHttp().put(`${url}/${data.id}`, {
-      body: { address },
+    let { id, name } = data;
+    let res = await helpHttp().put(`${url}/${id}`, {
+      body: { name },
       headers: { "content-type": "application/json" },
     });
 
-    if (res.err) {
-      // setError(resp);
-      console.log(res);
-      return;
-    }
+    console.log(res)
+    // if (res.err) {
+    //   // setError(resp);
+    //   console.log(res);
+    //   return {err: res.err};
+    // }
 
-    let newData = db.map((el) => (el.id === data.id ? data : el));
-    setDb(newData);
+    // let newData = db.map((el) => (el.id === data.id ? data : el));
+    // setDb(newData);
+    return {err: "error"};
   };
 
   if (error) {
@@ -59,8 +60,6 @@ const Addresses = ({ url, db, setDb, dataToEdit, setDataToEdit, error }) => {
       </Card>
     );
   }
-
-  console.log("Address...");
 
   return (
     <>

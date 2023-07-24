@@ -1,5 +1,5 @@
 const Table = ({ data, setDataToEdit }) => {
-  console.log("Table Node..");
+  
   return (
     <>
       <div className="card-header bg-white col-12">
@@ -24,8 +24,8 @@ const Table = ({ data, setDataToEdit }) => {
               <td>{e.details}</td>
               <td>{e.address}</td>
               <td>{e.ports}</td>
-              <td>{e.disponibles}</td>
-              <td>{e.usados}</td>
+              <td><code>disponibles</code></td>
+              <td><code>usados</code></td>
               <td>
                 <button
                   className="btn btn-sm btn-outline-wisp"

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import {Formik, Form} from 'formik'
+import * as Yub from 'yup'
 
 // Components
 import ButtonsForm from "../../extras/ButtonsForm";
@@ -13,54 +15,65 @@ const initialForm = {
   contracts_count: 0,
 };
 
-const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
-  const [form, setForm] = useState(initialForm);
+const Formulario = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
 
-  useEffect(() => {
-    if (dataToEdit) {
-      setForm(dataToEdit);
-    } else {
-      setForm(initialForm);
-    }
-  }, [dataToEdit]);
+   // useEffect(() => {
+   //  if (dataToEdit) {
+   //    setForm(dataToEdit);
+   //  } else {
+   //    setForm(initialForm);
+   //  }
+   // }, [dataToEdit]);
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleChange = (e) => {
+  //   setForm({
+  //     ...form,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   let res = {};
 
-    if (
-      !form.name ||
-      form.price <= 0 ||
-      form.ceil_down_mbps <= 0 ||
-      form.ceil_up_mbps <= 0
-    ) {
-      alert("Sin datos...");
-      return;
-    }
+  //   if (
+  //     !form.name ||
+  //     form.price <= 0 ||
+  //     form.ceil_down_mbps <= 0 ||
+  //     form.ceil_up_mbps <= 0
+  //   ) {
+  //     alert("Sin datos...");
+  //     return;
+  //   }
 
-    if (form.id === null) {
-      createData(form);
-    } else {
-      updateData(form);
-    }
+  //   if (form.id === null) {
+  //     res = await createData(form);
+  //   } else {
+  //     res = await updateData(form);
+  //   }
 
-    handleReset(e);
-  };
+  //   !res && handleReset(e);
+  // };
 
-  const handleReset = (e) => {
-    setForm(initialForm);
-    setDataToEdit(null);
-  };
+  const validate = Yub.object({
+    name: Yub.string()
+  })
+
+  const handleSubmit = (values, actions) => {
+    // Aqui debo registrar los datos
+    console.log(values)
+
+    // Si todo sale bien resetear el formulario
+    actions.resetForm()
+  }
 
   return (
-    <div className="col-sm-12">
-      <form className="text-center p-4" onSubmit={handleSubmit}>
+    <Formik className="col-sm-12" 
+      initialValues={initialForm} 
+      onSubmit={handleSubmit} 
+      onReset={() => {}} 
+      validationSchema={}>
+      <Form className="text-center p-4">
         <h5 className="card-header bg-white">
           <span className="h4 fw-bold">
             {dataToEdit ? "Modificar" : "Registrar"}
@@ -70,14 +83,11 @@ const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
           <Input
             label="Nombre"
             name="name"
-            value={form.name}
-            onChange={handleChange}
+            type="text"
           />
           <Input
             label="Max. Subida (Mbps)"
             name="ceil_up_mbps"
-            value={form.ceil_up_mbps}
-            onChange={handleChange}
             type="number"
             step="1"
             min="1"
@@ -86,8 +96,6 @@ const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
           <Input
             label="Max. Descargar (Mbps)"
             name="ceil_down_mbps"
-            value={form.ceil_down_mbps}
-            onChange={handleChange}
             type="number"
             step="1"
             min="1"
@@ -96,18 +104,16 @@ const Form = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
           <Input
             label="Precio (MNX)"
             name="price"
-            value={form.price}
-            onChange={handleChange}
             type="number"
             step="50"
             min="100"
             max="1000"
           />
-          <ButtonsForm onClick={handleReset} dataToEdit={dataToEdit} />
+          <ButtonsForm dataToEdit={dataToEdit} />
         </div>
-      </form>
-    </div>
+      </Form>
+    </Formik>
   );
 };
 
-export default Form;
+export default Formulario;

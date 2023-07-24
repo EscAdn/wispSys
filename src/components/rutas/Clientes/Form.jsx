@@ -36,16 +36,19 @@ const Form = ({
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let res = {};
+
     if (form.id === null) {
-      createData(form);
+      res = await createData(form);
     } else {
-      updateData(form);
+      res = await updateData(form);
     }
 
-    handleReset(e);
+    !res && handleReset(e);
+    
   };
 
   const handleReset = (e) => {

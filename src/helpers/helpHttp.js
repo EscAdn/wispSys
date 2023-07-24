@@ -31,8 +31,8 @@ export const helpHttp = () => {
       .catch((err) => {
         return {
           err: true,
-          status: "00",
-          statusText: err.message || "Ocurrió un error inesperado",
+          status: err.status || "00",
+          statusText: err.message || err.statusText || "Ocurrió un error inesperado",
         };
       });
   };

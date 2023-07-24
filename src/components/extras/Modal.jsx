@@ -1,5 +1,3 @@
-import React from "react";
-
 const Modal = ({ titulo, children }) => {
   return (
     <div className="modal fade modal-xl" tabIndex="-1">
@@ -15,7 +13,7 @@ const Modal = ({ titulo, children }) => {
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
-          </div>
+          </div>w
           <div className="modal-body">{children}</div>
           <div className="modal-footer">
             <button

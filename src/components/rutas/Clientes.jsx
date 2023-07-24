@@ -53,21 +53,22 @@ const Clientes = () => {
     delete data.id;
     data.address_id = parseInt(data.address_id);
 
-    let resp = await helpHttp().post(url, {
+    let resp = await helpHttp().post(urls.url_clients, {
       body: data,
       headers: { "content-type": "application/json" },
     });
 
     if (resp.err) {
       // setError(resp);
-      console.log(resp);
-      return;
+      // console.log(resp.err);
+      return {err: resp.err};
     }
 
     let addressName = address.find((x) => x.id === data.address_id);
     data.address = addressName.name;
     data.id = resp.insertId;
     setDb([...db, data]);
+    return;
   };
 
   const updateData = async (data) => {
@@ -83,13 +84,13 @@ const Clientes = () => {
 
     if (resp.err) {
       // setError(resp);
-      console.log(resp);
-      return;
+      return {err: resp.err};
     }
     data.address = address.find((x) => x.id === data.address_id).name;
     let newDate = db.map((x) => (x.id === data.id ? data : x));
 
     setDb(newDate);
+    return;
   };
 
   const deleteData = async (id) => {
@@ -97,16 +98,16 @@ const Clientes = () => {
 
     if (isConfirm) {
       let resp = await helpHttp().del(`${urls.url_clients}/${id}`);
+      console.log({resp})
 
       if (!resp.affectedRows) {
         setError({ err: "El Cliente tiene un Contrato activo" });
         return;
       }
-      console.log(typeof resp);
+
       if (resp.err) {
         // setError(resp);
-        console.log(resp);
-        return;
+        return {err: resp.err};
       }
 
       let newData = db.filter((el) => el.id !== id);

@@ -42,39 +42,39 @@ const Contratos = () => {
 
   const createData = async (data) => {
     delete data.id;
-    delete data.node_id;
+    data.client_id= parseInt(data.client_id);
+    data.plan_id= parseInt(data.plan_id);
+    data.state = "activo";
+      
+    console.log(data)
+    let res = {}
 
-    let { client_id, plan_id, server_id, ip, netmask, mac_address, details } =
-      data;
-
-    let res = await helpHttp().post(urls.url_contracts, {
-      body: {
-        client_id,
-        plan_id,
-        server_id,
-        ip,
-        netmask,
-        mac_address,
-        details,
-      },
+    await fetch(urls.url_contracts, {
+      method: "POST",
+      body: { data },
       headers: { "content-type": "application/json" },
-    });
+    })
+    .then(res => 
+      console.log(res.json())
+    ).catch(e => console.log(e.message));
 
-    if (res.err) {
-      setError(res);
-      return;
-    }
+    // if (res.err) {
+    //   // setError(res);
+    //   // console.log(res)
+    //   return {err: res.err};
+    // }
 
-    let cliente = clients.filter((el) => el.id === parseInt(data.client_id));
-    data.client = cliente[0].name;
+    // let cliente = clients.filter((el) => el.id === parseInt(data.client_id));
+    // data.client = cliente[0].name;
 
-    let planData = plans.filter((el) => el.id === parseInt(data.plan_id));
-    data.plan = planData[0].name;
-    data.price = planData[0].price;
+    // let planData = plans.filter((el) => el.id === parseInt(data.plan_id));
+    // data.plan = planData[0].name;
+    // data.price = planData[0].price;
 
-    data.id = res.insertId;
-    data.public_id = `RW${data.client_id}`;
-    setDb([...db, data]);
+    // data.id = res.insertId;
+    // data.public_id = `RW${data.client_id}`;
+    // setDb([...db, data]);
+    return;
   };
 
   const updateData = async (data) => {
@@ -107,8 +107,8 @@ const Contratos = () => {
     });
 
     if (resp.err) {
-      setError(res);
-      return;
+      // setError(res);
+      return {err: resp.err};
     }
 
     let planData = plans.filter((el) => el.id === data.plan_id);
@@ -118,6 +118,7 @@ const Contratos = () => {
 
     let newData = db.map((el) => (el.id === data.id ? data : el));
     setDb(newData);
+    return;
   };
 
   const deleteData = async (id) => {
@@ -125,10 +126,11 @@ const Contratos = () => {
 
     if (isConfirm) {
       let resp = await helpHttp().del(`${urls.url_contracts}/${id}`);
-
+      console.log({resp});
+      
       if (resp.err) {
-        setError(res);
-        return;
+        // setError(res);
+        return {err: resp.err};
       }
 
       let newData = db.filter((el) => el.id !== id);

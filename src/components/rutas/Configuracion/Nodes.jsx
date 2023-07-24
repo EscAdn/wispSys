@@ -34,6 +34,7 @@ const Nodes = ({ url, address }) => {
   const createData = async (data) => {
     delete data.id;
     data.address_id = parseInt(data.address_id);
+    data.ports = parseInt(data.ports);
 
     let { address_id, details, ports } = data;
 
@@ -43,17 +44,17 @@ const Nodes = ({ url, address }) => {
     });
 
     if (res.err) {
-      setError(res);
-      return;
+      // setError(res);
+      return {err: res.err};
     }
 
     data.id = res.insertId;
     data.disponibles = 0;
     data.usados = 0;
-
     //Colocar la zona en texto
     data.address = address.find((x) => x.id === data.address_id).name;
     setDb([...db, data]);
+    return;
   };
 
   // Editar registro
@@ -70,14 +71,14 @@ const Nodes = ({ url, address }) => {
 
     if (res.err) {
       // setError(res);
-      console.log(res);
-      return;
+      return {err: resp.err};
     }
 
     data.address = address.find((x) => x.id === data.address_id).name;
 
     let newData = db.map((el) => (el.id === data.id ? data : el));
     setDb(newData);
+    return;
   };
 
   if (error) {
@@ -88,7 +89,6 @@ const Nodes = ({ url, address }) => {
     );
   }
 
-  console.log("Nodes...");
   return (
     <>
       {db ? (

@@ -21,10 +21,10 @@ const Planes = () => {
   const getPlans = async () => {
     let resp = await helpHttp().get(urls.url_plans);
     if (resp.err) {
-      setError(resp);
+      // setError(resp);
       setDb(null);
     } else {
-      setError(null);
+      // setError(null);
       setDb(resp);
     }
   };
@@ -49,12 +49,13 @@ const Planes = () => {
     });
 
     if (res.err) {
-      setError(res);
-      return;
+      // setError(res);
+      return {err: res.err};
     }
 
     data.id = res.insertId;
     setDb([...db, data]);
+    return;
   };
 
   const updateData = async (data) => {
@@ -77,12 +78,13 @@ const Planes = () => {
       .then((res) => res);
 
     if (res.err) {
-      setError(res);
-      return;
+      // setError(res);
+      return {err: res.err};
     }
 
     let newData = db.map((el) => (el.id === data.id ? data : el));
     setDb(newData);
+    return;
   };
 
   if (error) {
@@ -96,20 +98,21 @@ const Planes = () => {
   return (
     <>
       <Header title="Planes" />
+      <Layout>
+        <Card md="col-md-5">
+          <Form
+          createData={createData}
+          updateData={updateData}
+          dataToEdit={dataToEdit}
+          setDataToEdit={setDataToEdit}
+          />
+        </Card>
+        <Card md="col-md-7">
+        {/*<Table data={db} error={error} setDataToEdit={setDataToEdit} />*/}
+        </Card>
+      </Layout>
       {db ? (
-        <Layout>
-          <Card md="col-md-5">
-            <Form
-              createData={createData}
-              updateData={updateData}
-              dataToEdit={dataToEdit}
-              setDataToEdit={setDataToEdit}
-            />
-          </Card>
-          <Card md="col-md-7">
-            <Table data={db} error={error} setDataToEdit={setDataToEdit} />
-          </Card>
-        </Layout>
+        <h1>No hay datos</h1>
       ) : (
         <Loading />
       )}

@@ -27,7 +27,7 @@ const Table = ({ data, setDataToEdit, deleteData }) => {
                 <td className="h6">{e.telephone}</td>
                 <td className="h6">{e.address}</td>
                 <td className="h6 text-primary">
-                  {e.created_at.substring(0, 10)}
+                  {e.created_at ? e.created_at.substring(0, 10) : "Ahora"}
                 </td>
                 <td>
                   <button

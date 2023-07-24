@@ -10,12 +10,13 @@ const initialForm = {
   client_id: 0,
   plan_id: 0,
   server_id: 1,
+  day_cut: 1,
   state: "",
   ip: "",
   netmask: "255.255.255.0",
   mac_address: "",
   details: "",
-  node_id: null,
+  node_id: 1,
 };
 
 const Form = ({
@@ -43,16 +44,16 @@ const Form = ({
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    let res = {};
     if (form.id === null) {
-      createData(form);
+      res = await createData(form);
     } else {
-      updateData(form);
+      res = await updateData(form);
     }
-
-    handleReset(e);
+    console.log(res)
+    !res && handleReset(e);
   };
 
   const handleReset = (e) => {
@@ -101,6 +102,12 @@ const Form = ({
               name="mac_address"
               onChange={handleChange}
               value={form.mac_address}
+            />
+            <Input
+              label="Corte"
+              name="day_cut"
+              onChange={handleChange}
+              value={form.day_cut}
             />
           </div>
           <ButtonsForm onClick={handleReset} dataToEdit={dataToEdit} />
