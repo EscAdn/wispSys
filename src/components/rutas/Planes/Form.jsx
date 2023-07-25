@@ -6,7 +6,7 @@ import * as Yub from 'yup'
 import ButtonsForm from "../../extras/ButtonsForm";
 import Input from "../../extras/Input";
 
-const initialForm = {
+let initialForm = {
   id: null,
   name: "",
   ceil_down_mbps: 0,
@@ -19,10 +19,9 @@ const Formulario = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
 
    // useEffect(() => {
    //  if (dataToEdit) {
-   //    setForm(dataToEdit);
-   //  } else {
-   //    setForm(initialForm);
+   //    initialForm = dataToEdit;
    //  }
+   //  console.log("UseEfect", dataToEdit)
    // }, [dataToEdit]);
 
   // const handleChange = (e) => {
@@ -56,15 +55,23 @@ const Formulario = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
   // };
 
   const validate = Yub.object({
-    name: Yub.string()
+    name: Yub.string().required("Obligatorio")
   })
 
   const handleSubmit = (values, actions) => {
     // Aqui debo registrar los datos
     console.log(values)
-
     // Si todo sale bien resetear el formulario
     actions.resetForm()
+    
+    setDataToEdit({
+      id: 19,
+      name: "Uchija",
+      ceil_down_mbps: 10,
+      ceil_up_mbps: 20,
+      price: 230,
+      contracts_count: 10,
+    })
   }
 
   return (
@@ -72,7 +79,7 @@ const Formulario = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
       initialValues={initialForm} 
       onSubmit={handleSubmit} 
       onReset={() => {}} 
-      validationSchema={}>
+      validationSchema={validate}>
       <Form className="text-center p-4">
         <h5 className="card-header bg-white">
           <span className="h4 fw-bold">
@@ -109,7 +116,7 @@ const Formulario = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
             min="100"
             max="1000"
           />
-          <ButtonsForm dataToEdit={dataToEdit} />
+          <ButtonsForm setDataToEdit={setDataToEdit} dataToEdit={dataToEdit} />
         </div>
       </Form>
     </Formik>
