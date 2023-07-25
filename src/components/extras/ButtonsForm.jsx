@@ -1,6 +1,6 @@
 import React from "react";
 
-const ButtonsForm = ({ dataToEdit }) => {
+const ButtonsForm = ({ setDataToEdit, dataToEdit }) => {
   return (
     <div className="container-fluit">
       <button className="btn btn-wisp" type="submit">
@@ -8,7 +8,11 @@ const ButtonsForm = ({ dataToEdit }) => {
         {dataToEdit ? "Modificar" : "Registrar"}
       </button>
       &nbsp;
-      <button className="btn btn-wisp" type="reset">
+      <button
+        className="btn btn-wisp"
+        type="reset"
+        onClick={() => setDataToEdit(false)}
+      >
         <i className="fas fa-broom"></i>&nbsp;Limpiar
       </button>
     </div>

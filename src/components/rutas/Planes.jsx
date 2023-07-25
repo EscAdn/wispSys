@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 
 // Helpers
 import { helpHttp } from "../../helpers/helpHttp";
@@ -14,78 +14,79 @@ import Message from "../extras/Message";
 import Loading from "../extras/Loading";
 
 const Planes = () => {
-  const [db, setDb] = useState(null);
-  const [dataToEdit, setDataToEdit] = useState(null);
+  const [db, setDb] = useState([]);
+  const [dataToEdit, setDataToEdit] = useState(false);
   const [error, setError] = useState(false);
 
   const getPlans = async () => {
     let resp = await helpHttp().get(urls.url_plans);
     if (resp.err) {
-      // setError(resp);
+      setError(resp);
       setDb(null);
     } else {
-      // setError(null);
+      setError(null);
       setDb(resp);
     }
   };
 
   useEffect(() => {
     getPlans();
+    console.log("Render Planes");
   }, []);
 
-  const createData = async (data) => {
-    delete data.id;
+  // const createData = async (data) => {
+  //   delete data.id;
 
-    let { name, ceil_down_mbps, ceil_up_mbps, price } = data;
+  //   let { name, ceil_down_mbps, ceil_up_mbps, price } = data;
 
-    let res = await helpHttp().post(urls.url_plans, {
-      body: {
-        name,
-        ceil_down_mbps,
-        ceil_up_mbps,
-        price,
-      },
-      headers: { "content-type": "application/json" },
-    });
+  //   let res = await helpHttp().post(urls.url_plans, {
+  //     body: {
+  //       name,
+  //       ceil_down_mbps,
+  //       ceil_up_mbps,
+  //       price,
+  //     },
+  //     headers: { "content-type": "application/json" },
+  //   });
 
-    if (res.err) {
-      // setError(res);
-      return {err: res.err};
-    }
+  //   if (res.err) {
+  //     // setError(res);
+  //     return { err: res.err };
+  //   }
 
-    data.id = res.insertId;
-    setDb([...db, data]);
-    return;
-  };
+  //   data.id = res.insertId;
+  //   setDb([...db, data]);
+  //   return;
+  // };
 
-  const updateData = async (data) => {
-    data.id = parseInt(data.id);
+  // const updateData = async (data) => {
+  //   data.id = parseInt(data.id);
 
-    let { name, ceil_down_mbps, ceil_up_mbps, price } = data;
+  //   let { name, ceil_down_mbps, ceil_up_mbps, price } = data;
 
-    let res = await helpHttp()
-      .put(`${urls.url_plans}/${data.id}`, {
-        body: {
-          name,
-          ceil_down_mbps,
-          ceil_up_mbps,
-          price,
-        },
-        headers: {
-          "content-type": "application/json",
-        },
-      })
-      .then((res) => res);
+  //   let res = await helpHttp()
+  //     .put(`${urls.url_plans}/${data.id}`, {
+  //       body: {
+  //         name,
+  //         ceil_down_mbps,
+  //         ceil_up_mbps,
+  //         price,
+  //       },
+  //       headers: {
+  //         "content-type": "application/json",
+  //       },
+  //     })
+  //     .then((res) => res);
 
-    if (res.err) {
-      // setError(res);
-      return {err: res.err};
-    }
+  //   if (res.err) {
+  //     // setError(res);
+  //     return { err: res.err };
+  //   }
 
-    let newData = db.map((el) => (el.id === data.id ? data : el));
-    setDb(newData);
-    return;
-  };
+  //   let newData = db.map((el) => (el.id === data.id ? data : el));
+  //   setDb(newData);
+  //   return;
+  // };
 
   if (error) {
     return (
@@ -98,21 +99,21 @@ const Planes = () => {
   return (
     <>
       <Header title="Planes" />
-      <Layout>
-        <Card md="col-md-5">
-          <Form
-          createData={createData}
-          updateData={updateData}
-          dataToEdit={dataToEdit}
-          setDataToEdit={setDataToEdit}
-          />
-        </Card>
-        <Card md="col-md-7">
-        {/*<Table data={db} error={error} setDataToEdit={setDataToEdit} />*/}
-        </Card>
-      </Layout>
       {db ? (
-        <h1>No hay datos</h1>
+        <Layout>
+          <Card md="col-md-5">
+            {/* <Form
+            createData={createData}
+            updateData={updateData}
+            dataToEdit={dataToEdit}
+            setDataToEdit={setDataToEdit}
+          /> */}
+            <Form dataToEdit={dataToEdit} setDataToEdit={setDataToEdit} />
+          </Card>
+          <Card md="col-md-7">
+            <Table data={db} error={error} setDataToEdit={setDataToEdit} />
+          </Card>
+        </Layout>
       ) : (
         <Loading />
       )}
@@ -120,4 +121,4 @@ const Planes = () => {
   );
 };
 
-export default Planes;
+export default memo(() => Planes());

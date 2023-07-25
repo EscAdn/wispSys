@@ -17,10 +17,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
-        <Route index element={<Inicio />} /> path="clients"
+        <Route index element={<Inicio />} />
         <Route path="clients" element={<Clientes />} />
         <Route path="contracts" element={<Contratos />} />
-        <Route path="plans" element={<Planes />} />
+        <Route path="plans" exact element={<Planes />} />
         <Route path="invoices" element={<Invoices />} />
         <Route path="gastos" element={<Gastos />} />
         <Route path="config" element={<Configuracion />} />
