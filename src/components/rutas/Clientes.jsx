@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 // Helpers
 import { helpHttp } from "./../../helpers/helpHttp";
@@ -17,37 +17,37 @@ const Clientes = () => {
   const [db, setDb] = useState(null);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [errorDb, setErrorDb] = useState(null);
-  const [errorAddress, setErrorAddress] = useState(null);
   const [address, setAddress] = useState(null);
+  const [errorAddress, setErrorAddress] = useState(null);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Obteniendo las direcciones para el Select
-    const getAddress = async () => {
-      const resp = await helpHttp().get(urls.url_address);
-      if (resp.err) {
-        setErrorAddress(resp);
-        setAddress(null);
-      } else {
-        setErrorAddress(null);
-        setAddress(resp);
-      }
-    };
-    // Obteniendo la lista de Clientes
-    const getClients = async () => {
-      const resp = await helpHttp().get(urls.url_clients);
-      if (resp.err) {
-        setErrorDb(resp);
-        setDb(null);
-      } else {
-        setErrorDb(null);
-        setDb(resp);
-      }
-    };
+  // Obteniendo las direcciones para el Select
+  const getAddress = async () => {
+    const resp = await helpHttp().get(urls.url_address);
+    if (resp.err) {
+      setErrorAddress(resp);
+      setAddress(null);
+    } else {
+      setErrorAddress(null);
+      setAddress(resp);
+    }
+  };
+  // Obteniendo la lista de Clientes
+  const getClients = async () => {
+    const resp = await helpHttp().get(urls.url_clients);
+    if (resp.err) {
+      setErrorDb(resp);
+      setDb(null);
+    } else {
+      setErrorDb(null);
+      setDb(resp);
+    }
+  };
 
+  useEffect(() => {
     getAddress();
     getClients();
-  }, [urls.url_clients]);
+  }, []);
 
   const createData = async (data) => {
     delete data.id;
@@ -61,7 +61,7 @@ const Clientes = () => {
     if (resp.err) {
       // setError(resp);
       // console.log(resp.err);
-      return {err: resp.err};
+      return { err: resp.err };
     }
 
     let addressName = address.find((x) => x.id === data.address_id);
@@ -84,7 +84,7 @@ const Clientes = () => {
 
     if (resp.err) {
       // setError(resp);
-      return {err: resp.err};
+      return { err: resp.err };
     }
     data.address = address.find((x) => x.id === data.address_id).name;
     let newDate = db.map((x) => (x.id === data.id ? data : x));
@@ -98,7 +98,7 @@ const Clientes = () => {
 
     if (isConfirm) {
       let resp = await helpHttp().del(`${urls.url_clients}/${id}`);
-      console.log({resp})
+      console.log({ resp });
 
       if (!resp.affectedRows) {
         setError({ err: "El Cliente tiene un Contrato activo" });
@@ -107,7 +107,7 @@ const Clientes = () => {
 
       if (resp.err) {
         // setError(resp);
-        return {err: resp.err};
+        return { err: resp.err };
       }
 
       let newData = db.filter((el) => el.id !== id);
@@ -161,4 +161,4 @@ const Clientes = () => {
   );
 };
 
-export default Clientes;
+export default memo(() => Clientes());

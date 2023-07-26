@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 
 // Components
 import ButtonsForm from "../../extras/ButtonsForm";
@@ -12,7 +14,7 @@ const initialForm = {
   address_id: 0,
 };
 
-const Form = ({
+const Formulario = ({
   address,
   createData,
   updateData,
@@ -29,66 +31,53 @@ const Form = ({
     }
   }, [dataToEdit]);
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleSubmit = async (values, actions) => {
+    let respuesta = {};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    let res = {};
-
-    if (form.id === null) {
-      res = await createData(form);
+    if (!values.id) {
+      respuesta = await createData(values);
     } else {
-      res = await updateData(form);
+      respuesta = await updateData(values);
     }
 
-    !res && handleReset(e);
-    
+    if (!respuesta) {
+      actions.resetForm();
+      setDataToEdit(false);
+    }
   };
 
-  const handleReset = (e) => {
-    setForm(initialForm);
-    setDataToEdit(null);
-  };
+  const validate = Yup.object({
+    name: Yup.string().required("Obligatorio"),
+    telephone: Yup.number().typeError("Deben ser un numero telefonico valido"),
+    address_id: Yup.number()
+      .required("Obligatorio")
+      .min(1, "Seleccione una direccion"),
+  });
 
   return (
-    <div className="col-sm-12">
-      <form className="text-center p-4" onSubmit={handleSubmit}>
+    <Formik
+      className="col-sm-12"
+      enableReinitialize={true}
+      initialValues={form}
+      onSubmit={handleSubmit}
+      onReset={() => {}}
+      validationSchema={validate}
+    >
+      <Form className="text-center p-4">
         <h5 className="card-header bg-white">
           <span className="h4 fw-bold">
             {dataToEdit ? "Modificar" : "Registrar"}
           </span>
         </h5>
         <div className="card-body">
-          <Input
-            label="Nombre Completo"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-          />
-          <Input
-            label="Teléfono"
-            name="telephone"
-            value={form.telephone}
-            onChange={handleChange}
-          />
-          <Select
-            data={address}
-            label="Dirección/Zona"
-            name="address_id"
-            value={form.address_id}
-            onChange={handleChange}
-          />
-          <ButtonsForm onClick={handleReset} dataToEdit={dataToEdit} />
+          <Input label="Nombre Completo" name="name" />
+          <Input label="Teléfono" name="telephone" />
+          <Select data={address} label="Dirección/Zona" name="address_id" />
+          <ButtonsForm dataToEdit={dataToEdit} setDataToEdit={setDataToEdit} />
         </div>
-      </form>
-    </div>
+      </Form>
+    </Formik>
   );
 };
 
-export default Form;
+export default Formulario;

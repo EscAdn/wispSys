@@ -33,7 +33,7 @@ const Formulario = ({
   }, [dataToEdit]);
 
   const validate = Yup.object({
-    address_id: Yup.number().required("Obligatorio"),
+    address_id: Yup.number().required("Obligatorio").min(1, "No puede ser cero"),
     details: Yup.string().required("Obligatorio"),
     ports: Yup.number().required("Obligatorio").min(8, "El valor debe ser 4, 8 o 16")
   });
@@ -41,7 +41,7 @@ const Formulario = ({
   const handleSubmit = async (values, actions) => {
     let respuesta = {};
 
-    if(form.id){
+    if(values.id > 0){
       respuesta = await updateData(values);
     }else{
       respuesta = await createData(values);

@@ -15,10 +15,10 @@ const Input = ({ label, col = "", type = "text", ...props }) => {
           {...props}
         />
         <label htmlFor="floatingName">{label}</label>
+        {meta.touched && meta.error ? (
+           <div className="text-danger text-start error">*{meta.error}</div>
+         ) : null}
       </div>
-      {meta.touched && meta.error ? (
-         <div className="error">{meta.error}</div>
-       ) : null}
     </>
   );
 };

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 
 // Components
 import Input from "../../extras/Input";
@@ -19,7 +21,7 @@ const initialForm = {
   node_id: 1,
 };
 
-const Form = ({
+const Formulario = ({
   createData,
   updateData,
   dataToEdit,
@@ -31,90 +33,74 @@ const Form = ({
 
   useEffect(() => {
     if (dataToEdit) {
-      setForm(dataToEdit);
+      setForm({ ...dataToEdit });
     } else {
-      setForm(initialForm);
+      setForm({ ...initialForm });
     }
   }, [dataToEdit]);
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let res = {};
-    if (form.id === null) {
-      res = await createData(form);
+  const handleSubmit = async (values, actions) => {
+    let resespuesta = {};
+    if (!values.id) {
+      resespuesta = await createData(values);
     } else {
-      res = await updateData(form);
+      resespuesta = await updateData(values);
     }
-    console.log(res)
-    !res && handleReset(e);
+
+    if (!respuesta) {
+      actions.resetForm();
+      setDataToEdit(false);
+    }
   };
 
-  const handleReset = (e) => {
-    setForm(initialForm);
-    setDataToEdit(null);
-  };
+  const validate = Yup.object({
+    client_id: Yup.number()
+      .required("Seleccione un Cliente")
+      .typeError("Debe ser un Cliente"),
+    plan_id: Yup.number()
+      .required("Seleccione un Plan")
+      .typeError("Debe ser un Plan"),
+    day_cut: Yup.number()
+      .required("Obligatorio")
+      .typeError("Debe ser un numero"),
+    ip: Yup.string().required("Obligatorio"),
+    netmask: Yup.string().required("Obligatorio"),
+    mac_address: Yup.string().required("Obligatorio"),
+    details: Yup.string(),
+    node_id: Yup.number()
+      .required("Seleccione un Nodo")
+      .typeError("Debe ser un Nodo"),
+  });
 
   return (
     <>
-      <div className="col-sm-12">
-        <form className="text-center p-4" onSubmit={handleSubmit}>
+      <Formik
+        className="col-sm-12"
+        enableReinitialize={true}
+        initialValues={form}
+        onSubmit={handleSubmit}
+        onReset={() => {}}
+        validationSchema={validate}
+      >
+        <Form className="text-center p-4">
           <h5 className="card-header bg-white">
             <span className="h4 fw-bold">
               {dataToEdit ? "Modificar" : "Registrar"}
             </span>
           </h5>
           <div className="card-body">
-            <Select
-              data={clients}
-              label="Cliente"
-              name="client_id"
-              onChange={handleChange}
-              value={form.client_id}
-            />
-            <Select
-              data={plans}
-              label="Cliente"
-              name="plan_id"
-              onChange={handleChange}
-              value={form.plan_id}
-            />
-            <Input
-              label="IP"
-              name="ip"
-              onChange={handleChange}
-              value={form.ip}
-            />
-            <Input
-              label="Subred"
-              name="netmask"
-              onChange={handleChange}
-              value={form.netmask}
-            />
-            <Input
-              label="MAC"
-              name="mac_address"
-              onChange={handleChange}
-              value={form.mac_address}
-            />
-            <Input
-              label="Corte"
-              name="day_cut"
-              onChange={handleChange}
-              value={form.day_cut}
-            />
+            <Select data={clients} label="Cliente" name="client_id" />
+            <Select data={plans} label="Cliente" name="plan_id" />
+            <Input label="IP" name="ip" />
+            <Input label="Subred" name="netmask" />
+            <Input label="MAC" name="mac_address" />
+            <Input label="Corte" name="day_cut" />
           </div>
-          <ButtonsForm onClick={handleReset} dataToEdit={dataToEdit} />
-        </form>
-      </div>
+          <ButtonsForm setDataToEdit={setDataToEdit} dataToEdit={dataToEdit} />
+        </Form>
+      </Formik>
     </>
   );
 };
 
-export default Form;
+export default Formulario;

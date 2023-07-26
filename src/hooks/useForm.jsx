@@ -1,59 +1,47 @@
-import { useState } from "react";
-import { helperHttp } from "../helpers/helperHttp";
+import { useState, useEffect } from "react";
 
-export const useForm = (initialForm, validateForm) => {
+export const useFormulario = ({
+  initialForm,
+  createData,
+  updateData,
+  dataToEdit,
+  setDataToEdit,
+}) => {
   const [form, setForm] = useState(initialForm);
-  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState(null);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
-
-  const handleBlur = (e) => {
-    handleChange(e);
-    setErrors(validateForm(form));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setErrors(validateForm(form));
-
-    if (Object.keys(errors).length === 0) {
-      alert("Enviando Formulario");
-      setLoading(true);
-      helperHttp()
-        .post("https://formsubmit.co/ajax/jonmircha@gmail.com", {
-          body: form,
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        })
-        .then((res) => {
-          setLoading(false);
-          setResponse(true);
-          setForm(initialForm);
-          setTimeout(() => setResponse(false), 5000);
-        });
+  useEffect(() => {
+    if (dataToEdit) {
+      setForm({ ...dataToEdit });
     } else {
-      return;
+      setForm({ ...initialForm });
     }
+    console.log(form, initialForm);
+  }, [dataToEdit]);
+
+  const handleSubmit = async (values, actions) => {
+    setLoading(true);
+    let respuesta = {};
+    console.log(values);
+
+    // if (values.id) {
+    //   respuesta = await updateData(values);
+    // } else {
+    //   respuesta = await createData(values);
+    // }
+    // // Si todo sale bien resetear el formulario
+    // if (!respuesta) {
+    //   actions.resetForm();
+    //   setDataToEdit(false);
+    // }
+    setLoading(false);
   };
 
   return {
     form,
-    errors,
     loading,
-    response,
-    handleChange,
-    handleBlur,
     handleSubmit,
+    dataToEdit,
+    setDataToEdit,
   };
 };

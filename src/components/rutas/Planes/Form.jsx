@@ -28,21 +28,27 @@ const Formulario = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
 
   const validate = Yub.object({
     name: Yub.string().required("Obligatorio"),
-    ceil_down_mbps: Yub.number().required("Obligatorio").min(1, "La velocidad no puede ser 0"),
-    ceil_up_mbps: Yub.number().required("Obligatorio").min(1, "El velocidad no puede ser 0"),
-    price: Yub.number().required("Obligatorio").min(1, "El precio no puede ser 0"),
+    ceil_down_mbps: Yub.number()
+      .required("Obligatorio")
+      .min(1, "La velocidad no puede ser 0"),
+    ceil_up_mbps: Yub.number()
+      .required("Obligatorio")
+      .min(1, "El velocidad no puede ser 0"),
+    price: Yub.number()
+      .required("Obligatorio")
+      .min(1, "El precio no puede ser 0"),
   });
 
   const handleSubmit = async (values, actions) => {
-    let respuesta = {}
+    let respuesta = {};
     // Aqui debo registrar los datos
-    if(form.id){
+    if (form.id) {
       respuesta = await updateData(values);
-    }else{
+    } else {
       respuesta = await createData(values);
     }
     // Si todo sale bien resetear el formulario
-    if(!respuesta){
+    if (!respuesta) {
       actions.resetForm();
       setDataToEdit(false);
     }

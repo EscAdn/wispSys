@@ -29,7 +29,6 @@ const Nodes = ({ url, address }) => {
 
   useEffect(() => {
     getNodes(url);
-    console.log("Nodes");
   }, []);
 
   // Nuevo registro
@@ -78,8 +77,8 @@ const Nodes = ({ url, address }) => {
 
     data.address = address.find((x) => x.id === data.address_id).name;
 
-    let newData = db.map((el) => (el.id === data.id ? data : el));
-    setDb(newData);
+    let newData = nodes.map((el) => (el.id === data.id ? data : el));
+    setNodes(newData);
     return null;
   };
 
