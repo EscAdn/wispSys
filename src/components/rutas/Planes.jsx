@@ -17,6 +17,7 @@ const Planes = () => {
   const [db, setDb] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(false);
   const [error, setError] = useState(false);
+  const [respError, setRespError] = useState(false);
 
   const getPlans = async () => {
     let resp = await helpHttp().get(urls.url_plans);
@@ -31,62 +32,60 @@ const Planes = () => {
 
   useEffect(() => {
     getPlans();
-    console.log("Render Planes");
   }, []);
 
-  // const createData = async (data) => {
-  //   delete data.id;
+  const createData = async (data) => {
+    delete data.id;
 
-  //   let { name, ceil_down_mbps, ceil_up_mbps, price } = data;
+    let { name, ceil_down_mbps, ceil_up_mbps, price } = data;
 
-  //   let res = await helpHttp().post(urls.url_plans, {
-  //     body: {
-  //       name,
-  //       ceil_down_mbps,
-  //       ceil_up_mbps,
-  //       price,
-  //     },
-  //     headers: { "content-type": "application/json" },
-  //   });
+    let res = await helpHttp().post(urls.url_plans, {
+      body: {
+        name,
+        ceil_down_mbps,
+        ceil_up_mbps,
+        price
+      },
+      headers: { "content-type": "application/json" },
+    });
 
-  //   if (res.err) {
-  //     // setError(res);
-  //     return { err: res.err };
-  //   }
+    if (res.err) {
+      setRespError(res);
+      return { err: res.err };
+    }
 
-  //   data.id = res.insertId;
-  //   setDb([...db, data]);
-  //   return;
-  // };
+    data.id = res.insertId;
+    setDb([...db, data]);
+    return null;
+  };
 
-  // const updateData = async (data) => {
-  //   data.id = parseInt(data.id);
+  const updateData = async (data) => {
+    data.id = parseInt(data.id);
 
-  //   let { name, ceil_down_mbps, ceil_up_mbps, price } = data;
+    let { name, ceil_down_mbps, ceil_up_mbps, price } = data;
 
-  //   let res = await helpHttp()
-  //     .put(`${urls.url_plans}/${data.id}`, {
-  //       body: {
-  //         name,
-  //         ceil_down_mbps,
-  //         ceil_up_mbps,
-  //         price,
-  //       },
-  //       headers: {
-  //         "content-type": "application/json",
-  //       },
-  //     })
-  //     .then((res) => res);
+    let res = await helpHttp().put(`${urls.url_plans}/${data.id}`, {
+        body: {
+          name,
+          ceil_down_mbps,
+          ceil_up_mbps,
+          price,
+        },
+        headers: {
+          "content-type": "application/json",
+        },
+      })
+      .then((res) => res);
 
-  //   if (res.err) {
-  //     // setError(res);
-  //     return { err: res.err };
-  //   }
+    if (res.err) {
+      setRespError(res);
+      return { err: res.err };
+    }
 
-  //   let newData = db.map((el) => (el.id === data.id ? data : el));
-  //   setDb(newData);
-  //   return;
-  // };
+    let newData = db.map((el) => (el.id === data.id ? data : el));
+    setDb(newData);
+    return;
+  };
 
   if (error) {
     return (
@@ -102,13 +101,8 @@ const Planes = () => {
       {db ? (
         <Layout>
           <Card md="col-md-5">
-            {/* <Form
-            createData={createData}
-            updateData={updateData}
-            dataToEdit={dataToEdit}
-            setDataToEdit={setDataToEdit}
-          /> */}
-            <Form dataToEdit={dataToEdit} setDataToEdit={setDataToEdit} />
+            {respError && <Message msg={`${respError.status} - ${respError.statusText}`} />}
+            <Form createData={createData} updateData={updateData} dataToEdit={dataToEdit} setDataToEdit={setDataToEdit} />
           </Card>
           <Card md="col-md-7">
             <Table data={db} error={error} setDataToEdit={setDataToEdit} />

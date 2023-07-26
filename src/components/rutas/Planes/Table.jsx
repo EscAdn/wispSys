@@ -19,12 +19,12 @@ const Table = ({ data, setDataToEdit }) => {
             <tr key={e.id}>
               <td className="fw-bold">{e.name}</td>
               <td>
-                <i className="text-success fas fa-cloud-arrow-up"></i>
+                <i className="text-primary fas fa-cloud-arrow-up"></i>
                 &nbsp;
                 {e.ceil_up_mbps} Mbps
               </td>
               <td>
-                <i className="text-danger fas fa-cloud-arrow-down"></i>
+                <i className="text-info fas fa-cloud-arrow-down"></i>
                 &nbsp;
                 {e.ceil_down_mbps} Mbps
               </td>

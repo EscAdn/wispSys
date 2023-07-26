@@ -11,23 +11,25 @@ import Card from "../../extras/Card";
 import Loading from "../../extras/Loading";
 
 const Nodes = ({ url, address }) => {
-  const [db, setDb] = useState(null);
+  const [nodes, setNodes] = useState(null);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [error, setError] = useState(null);
+  const [respError, setRespError] = useState(false);
 
   const getNodes = async (url) => {
     const resp = await helpHttp().get(url);
     if (resp.err) {
       setError(resp);
-      setDb(null);
+      setNodes(null);
     } else {
       setError(null);
-      setDb(resp);
+      setNodes(resp);
     }
   };
 
   useEffect(() => {
     getNodes(url);
+    console.log("Nodes");
   }, []);
 
   // Nuevo registro
@@ -44,7 +46,7 @@ const Nodes = ({ url, address }) => {
     });
 
     if (res.err) {
-      // setError(res);
+      setRespError(res);
       return {err: res.err};
     }
 
@@ -53,8 +55,8 @@ const Nodes = ({ url, address }) => {
     data.usados = 0;
     //Colocar la zona en texto
     data.address = address.find((x) => x.id === data.address_id).name;
-    setDb([...db, data]);
-    return;
+    setNodes([...db, data]);
+    return null;
   };
 
   // Editar registro
@@ -70,7 +72,7 @@ const Nodes = ({ url, address }) => {
     });
 
     if (res.err) {
-      // setError(res);
+      setRespError(res);
       return {err: resp.err};
     }
 
@@ -78,7 +80,7 @@ const Nodes = ({ url, address }) => {
 
     let newData = db.map((el) => (el.id === data.id ? data : el));
     setDb(newData);
-    return;
+    return null;
   };
 
   if (error) {
@@ -91,8 +93,9 @@ const Nodes = ({ url, address }) => {
 
   return (
     <>
-      {db ? (
+      {nodes ? (
         <div className="col-12 h-max scroll overflow-auto">
+          {respError && <Message msg={`${respError.status} - ${respError.statusText}`} />}
           <Form
             address={address}
             createData={createData}
@@ -101,7 +104,7 @@ const Nodes = ({ url, address }) => {
             setDataToEdit={setDataToEdit}
           />
           <div className="bg-white col-sm-12 p-3">
-            <TablaNodes data={db} setDataToEdit={setDataToEdit} />
+            <TablaNodes data={nodes} setDataToEdit={setDataToEdit} />
           </div>
         </div>
       ) : (

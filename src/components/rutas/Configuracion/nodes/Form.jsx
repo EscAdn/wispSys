@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 
 // Components
+import ButtonsForm from "../../../extras/ButtonsForm";
 import Input from "../../../extras/Input";
 import Select from "../../../extras/Select";
 
-const initialForm = { id: null, address_id: 0, details: "", ports: 8 };
+const initialForm = { 
+  id: null, 
+  address_id: 0, 
+  details: "", 
+  ports: 8 
+};
 
-const Form = ({
+const Formulario = ({
   createData,
   updateData,
   dataToEdit,
@@ -16,41 +24,46 @@ const Form = ({
   const [form, setForm] = useState(initialForm);
 
   useEffect(() => {
+    console.log("Formulario Nodes")
     if (dataToEdit) {
-      setForm(dataToEdit);
+      setForm({ ...dataToEdit });
     } else {
-      setForm(initialForm);
+      setForm({ ...initialForm });
     }
   }, [dataToEdit]);
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const validate = Yup.object({
+    address_id: Yup.number().required("Obligatorio"),
+    details: Yup.string().required("Obligatorio"),
+    ports: Yup.number().required("Obligatorio").min(8, "El valor debe ser 4, 8 o 16")
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let res = {};
-    if (form.id === null) {
-      res = await createData(form);
-    } else {
-      res = await updateData(form);
+  const handleSubmit = async (values, actions) => {
+    let respuesta = {};
+
+    if(form.id){
+      respuesta = await updateData(values);
+    }else{
+      respuesta = await createData(values);
     }
-    
-    !res && handleReset(e);
-  };
-
-  const handleReset = (e) => {
-    setForm(initialForm);
-    setDataToEdit(null);
+    // Si todo sale bien resetear el formulario
+    if(!respuesta){
+      actions.resetForm();
+      setDataToEdit(false);
+    }
   };
 
   return (
     <>
-      <div className="col-sm-12">
-        <form className="text-center p-4" onSubmit={handleSubmit}>
+      <Formik 
+        className="col-sm-12"
+        enableReinitialize={true}
+        initialValues={form}
+        onSubmit={handleSubmit}
+        onReset={() => {}}
+        validationSchema={validate}
+        >
+        <Form className="text-center px-4 pt-1">
           <h5 className="card-header bg-white">
             <span className="h5 fw-bold">
               {dataToEdit ? "Modificar" : "Registrar"}
@@ -59,24 +72,19 @@ const Form = ({
           <div className="card-body row g-2">
             <Input
               label="Detalles/Caja/Nodo"
-              onChange={handleChange}
-              value={form.details}
               name="details"
+              autoComplete="off"
             />
             <Select
               data={address}
               col="col-md-6"
               label="Nodo/Caja"
-              onChange={handleChange}
-              value={form.address_id}
               name="address_id"
             />
             <Input
               type="number"
               col="col-md-6"
               label="No. de Puertos"
-              onChange={handleChange}
-              value={form.ports}
               name="ports"
               step="8"
               min="8"
@@ -85,20 +93,11 @@ const Form = ({
               placeholder="No. de Puertos"
             />
           </div>
-          <div className="container-fluit">
-            <button className="btn btn-wisp">
-              <i className="fas fa-save"></i>&nbsp;
-              {dataToEdit ? "Modificar" : "Registrar"}
-            </button>
-            &nbsp;
-            <a className="btn btn-wisp" onClick={handleReset}>
-              <i className="fas fa-broom"></i>&nbsp;Limpiar
-            </a>
-          </div>
-        </form>
-      </div>
+          <ButtonsForm dataToEdit={dataToEdit} setDataToEdit={setDataToEdit} />
+        </Form>
+      </Formik>
     </>
   );
 };
 
-export default Form;
+export default Formulario;

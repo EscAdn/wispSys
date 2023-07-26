@@ -1,3 +1,4 @@
+import { useEffect, useState, memo } from 'react'
 // Helpers
 import { helpHttp } from "../../../helpers/helpHttp";
 
@@ -8,7 +9,12 @@ import Message from "../../extras/Message";
 import Form from "./address/Form";
 import Table from "./address/Table";
 
-const Addresses = ({ url, db, setDb, dataToEdit, setDataToEdit, error }) => {
+const Addresses = ({ url = "", db, setDb, dataToEdit, setDataToEdit, error }) => {
+  const [respError, setRespError] = useState(false);
+
+  useEffect(() => {
+    console.log("Adddress Component")
+  }, [])
   // Nuevo registro
   const createData = async (data) => {
     delete data.id;
@@ -22,14 +28,13 @@ const Addresses = ({ url, db, setDb, dataToEdit, setDataToEdit, error }) => {
     });
 
     if (res.err) {
-      // setError(res);
-      console.log(res);
+      setRespError(res);
       return {err: res.err};
     }
 
     data.id = res.insertId;
     setDb([...db, data]);
-    return;
+    return null;
   };
 
   // Editar registro
@@ -41,16 +46,14 @@ const Addresses = ({ url, db, setDb, dataToEdit, setDataToEdit, error }) => {
       headers: { "content-type": "application/json" },
     });
 
-    console.log(res)
-    // if (res.err) {
-    //   // setError(resp);
-    //   console.log(res);
-    //   return {err: res.err};
-    // }
+    if (res.err) {
+      setRespError(resp);
+      return {err: res.err};
+    }
 
-    // let newData = db.map((el) => (el.id === data.id ? data : el));
-    // setDb(newData);
-    return {err: "error"};
+    let newData = db.map((el) => (el.id === data.id ? data : el));
+    setDb(newData);
+    return null;
   };
 
   if (error) {
@@ -65,6 +68,7 @@ const Addresses = ({ url, db, setDb, dataToEdit, setDataToEdit, error }) => {
     <>
       {db ? (
         <div className="col-12 h-max scroll overflow-auto">
+          {respError && <Message msg={`${respError.status} - ${respError.statusText}`} />}
           <Form
             createData={createData}
             updateData={updateData}

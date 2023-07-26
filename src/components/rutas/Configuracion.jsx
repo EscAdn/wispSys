@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 
 // Helpers
 import { helpHttp } from "../../helpers/helpHttp";
@@ -16,20 +16,21 @@ const Configuracion = () => {
   const [dataToEdit, setDataToEdit] = useState(null);
   const [error, setError] = useState(null);
 
+  // Obteniendo las direcciones para el Select
+  const getAddress = async () => {
+    const resp = await helpHttp().get(urls.url_address);
+    if (resp.err) {
+      setError(resp);
+      setDb(null);
+    } else {
+      setError(null);
+      setDb(resp);
+    }
+  };
+  
   useEffect(() => {
-    // Obteniendo las direcciones para el Select
-    const getAddress = async () => {
-      const resp = await helpHttp().get(urls.url_address);
-      if (resp.err) {
-        setError(resp);
-        setDb(null);
-      } else {
-        setError(null);
-        setDb(resp);
-      }
-    };
-
     getAddress();
+    console.log("Config Component")
   }, []);
 
   return (
@@ -56,4 +57,4 @@ const Configuracion = () => {
   );
 };
 
-export default Configuracion;
+export default memo(() => Configuracion());
