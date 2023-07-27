@@ -21,7 +21,7 @@ const Contratos = () => {
   const [plans, setPlans] = useState(null);
   const [errorPlans, setErrorPlans] = useState(null);
   const [dataToEdit, setDataToEdit] = useState(null);
-  const [respError, setRespError] = useState(null);
+  const [respError, setRespError] = useState(false);
 
   const getHttp = async (url, setState, setError) => {
     let resp = await helpHttp().get(url);
@@ -42,26 +42,20 @@ const Contratos = () => {
 
   const createData = async (data) => {
     delete data.id;
+    delete data.client;
+    delete data.plan;
     data.client_id = parseInt(data.client_id);
     data.plan_id = parseInt(data.plan_id);
     data.state = "activo";
 
-    console.log(data);
-    let res = {};
-
-    await fetch(urls.url_contracts, {
-      method: "POST",
-      body: { data },
+    let resp = await helpHttp().post(urls.url_contracts, {
+      body: data,
       headers: { "content-type": "application/json" },
-    })
-      .then((res) => console.log(res.json()))
-      .catch((e) => console.log(e.message));
+    });
 
-    if (res.err) {
-      // setError(res);
-      console.log(res);
-      q;
-      return { err: res.err };
+    if (resp.err) {
+      setRespError(resp);
+      return { err: resp.err };
     }
 
     let cliente = clients.filter((el) => el.id === parseInt(data.client_id));
@@ -71,54 +65,43 @@ const Contratos = () => {
     data.plan = planData[0].name;
     data.price = planData[0].price;
 
-    data.id = res.insertId;
-    data.public_id = `RW${data.client_id}`;
-    console.log(data);
+    data.id = resp.insertId;
+    // data.public_id = `RW${data.client_id}`;
     setDb([...db, data]);
+    respError && setRespError(false);
     return;
   };
 
   const updateData = async (data) => {
+    delete data.client;
+    delete data.plan;
+    delete data.price;
+    delete data.address;
     data.client_id = parseInt(data.client_id);
     data.plan_id = parseInt(data.plan_id);
 
-    let {
-      client_id,
-      plan_id,
-      server_id,
-      state,
-      ip,
-      netmask,
-      mac_address,
-      details,
-    } = data;
-
     let resp = await helpHttp().put(`${urls.url_contracts}/${data.id}`, {
-      body: {
-        client_id,
-        plan_id,
-        server_id,
-        state,
-        ip,
-        netmask,
-        mac_address,
-        details,
-      },
+      body: data,
       headers: { "content-type": "application/json" },
     });
 
     if (resp.err) {
-      // setError(res);
+      setRespError(resp);
       return { err: resp.err };
     }
 
-    let planData = plans.filter((el) => el.id === data.plan_id);
+    let client = clients.filter(el => el.id === data.client_id);
+
+    let planData = plans.filter(el => el.id === data.plan_id);
 
     data.plan = planData[0].name;
     data.price = planData[0].price;
+    data.client = client[0].name;
+    data.address = client[0].address;
 
     let newData = db.map((el) => (el.id === data.id ? data : el));
     setDb(newData);
+    respError && setRespError(false);
     return;
   };
 
@@ -127,15 +110,16 @@ const Contratos = () => {
 
     if (isConfirm) {
       let resp = await helpHttp().del(`${urls.url_contracts}/${id}`);
-      console.log({ resp });
 
       if (resp.err) {
-        // setError(res);
+        setRespError(res);
         return { err: resp.err };
       }
 
       let newData = db.filter((el) => el.id !== id);
       setDb(newData);
+      respError && setRespError(false);
+      return;
     } else {
       return;
     }
@@ -190,6 +174,7 @@ const Contratos = () => {
       {db && clients && plans ? (
         <Layout>
           <Card md="col-md-3">
+            {respError && <Message msg={`${respError.status} - ${respError.statusText}`} />}
             <Formulario
               createData={createData}
               updateData={updateData}

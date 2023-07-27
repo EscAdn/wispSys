@@ -52,7 +52,7 @@ const Table = ({ data, setDataToEdit, deleteData, generateInvoice }) => {
                       </a>
                     </span>
                     <h5>
-                      <div className="col">{e.mac_address}</div>
+                      <div className="col">{e.mac_address.toUpperCase()}</div>
                     </h5>
                   </div>
                 </td>

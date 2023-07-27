@@ -63,7 +63,7 @@ const Formulario = ({
       onReset={() => {}}
       validationSchema={validate}
     >
-      <Form className="text-center p-4">
+      <Form className="text-center px-4 pt-1">
         <h5 className="card-header bg-white">
           <span className="h4 fw-bold">
             {dataToEdit ? "Modificar" : "Registrar"}

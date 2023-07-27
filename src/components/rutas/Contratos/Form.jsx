@@ -40,11 +40,11 @@ const Formulario = ({
   }, [dataToEdit]);
 
   const handleSubmit = async (values, actions) => {
-    let resespuesta = {};
+    let respuesta = {};
     if (!values.id) {
-      resespuesta = await createData(values);
+      respuesta = await createData(values);
     } else {
-      resespuesta = await updateData(values);
+      respuesta = await updateData(values);
     }
 
     if (!respuesta) {
@@ -56,13 +56,13 @@ const Formulario = ({
   const validate = Yup.object({
     client_id: Yup.number()
       .required("Seleccione un Cliente")
-      .typeError("Debe ser un Cliente"),
+      .typeError("Debe ser un Cliente").min(1, "Seleccione un Cliente"),
     plan_id: Yup.number()
       .required("Seleccione un Plan")
-      .typeError("Debe ser un Plan"),
+      .typeError("Debe ser un Plan").min(1, "Seleccione un plan"),
     day_cut: Yup.number()
       .required("Obligatorio")
-      .typeError("Debe ser un numero"),
+      .typeError("Debe ser un numero").min(1, "Debe ser mayo de 0 y menor de 28").max(28, "Debe ser mayo de 0 y menor de 28"),
     ip: Yup.string().required("Obligatorio"),
     netmask: Yup.string().required("Obligatorio"),
     mac_address: Yup.string().required("Obligatorio"),
@@ -82,7 +82,7 @@ const Formulario = ({
         onReset={() => {}}
         validationSchema={validate}
       >
-        <Form className="text-center p-4">
+        <Form className="text-center px-4 pt-1">
           <h5 className="card-header bg-white">
             <span className="h4 fw-bold">
               {dataToEdit ? "Modificar" : "Registrar"}
@@ -93,7 +93,7 @@ const Formulario = ({
             <Select data={plans} label="Cliente" name="plan_id" />
             <Input label="IP" name="ip" />
             <Input label="Subred" name="netmask" />
-            <Input label="MAC" name="mac_address" />
+            <Input upper="true" label="MAC" name="mac_address" />
             <Input label="Corte" name="day_cut" />
           </div>
           <ButtonsForm setDataToEdit={setDataToEdit} dataToEdit={dataToEdit} />

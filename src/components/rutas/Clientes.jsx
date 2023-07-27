@@ -19,7 +19,7 @@ const Clientes = () => {
   const [errorDb, setErrorDb] = useState(null);
   const [address, setAddress] = useState(null);
   const [errorAddress, setErrorAddress] = useState(null);
-  const [error, setError] = useState(null);
+  const [respError, setRespError] = useState(false);
 
   // Obteniendo las direcciones para el Select
   const getAddress = async () => {
@@ -59,8 +59,7 @@ const Clientes = () => {
     });
 
     if (resp.err) {
-      // setError(resp);
-      // console.log(resp.err);
+      setRespError(resp);
       return { err: resp.err };
     }
 
@@ -68,6 +67,7 @@ const Clientes = () => {
     data.address = addressName.name;
     data.id = resp.insertId;
     setDb([...db, data]);
+    respError && setRespError(false);
     return;
   };
 
@@ -83,13 +83,14 @@ const Clientes = () => {
     });
 
     if (resp.err) {
-      // setError(resp);
+      setRespError(resp);
       return { err: resp.err };
     }
     data.address = address.find((x) => x.id === data.address_id).name;
     let newDate = db.map((x) => (x.id === data.id ? data : x));
 
     setDb(newDate);
+    respError && setRespError(false);
     return;
   };
 
@@ -106,11 +107,12 @@ const Clientes = () => {
       }
 
       if (resp.err) {
-        // setError(resp);
+        setRespError(resp);
         return { err: resp.err };
       }
 
       let newData = db.filter((el) => el.id !== id);
+      respError && setRespError(false);
       setDb(newData);
     } else {
       return;
@@ -138,6 +140,7 @@ const Clientes = () => {
       {db ? (
         <Layout>
           <Card md="col-md-4">
+            {respError && <Message msg={`${respError.status} - ${respError.statusText}`} />}
             <Form
               address={address}
               createData={createData}

@@ -1,7 +1,7 @@
 import React from "react";
 import { useField, ErrorMessage } from 'formik'
 
-const Input = ({ label, col = "", type = "text", ...props }) => {
+const Input = ({ label, col = "", upper = false, type = "text", ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
@@ -9,7 +9,7 @@ const Input = ({ label, col = "", type = "text", ...props }) => {
         <input
           type={type}
           autoComplete="off"
-          className="form-control"
+          className={`form-control ${upper && "text-uppercase"}`}
           id="floatingName"
           {...field}
           {...props}
