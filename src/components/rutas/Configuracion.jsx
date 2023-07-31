@@ -30,14 +30,14 @@ const Configuracion = () => {
   
   useEffect(() => {
     getAddress();
-    console.log("Config Component")
+    // console.log("Config Component")
   }, []);
 
   return (
     <>
       <Header title="Configuración" />
       <Layout>
-        <Card md="col-md-5">
+        <Card md="col-md-6">
           <h6 className="text-center fw-bold">Direcciones/Zonas</h6>
           <Addresses
             url={urls.url_address}
@@ -48,7 +48,7 @@ const Configuracion = () => {
             error={error}
           />
         </Card>
-        <Card md="col-md-7">
+        <Card md="col-md-6">
           <h6 className="text-center fw-bold">Nodos/Cajas</h6>
           <Nodes url={urls.url_nodes} address={db} />
         </Card>

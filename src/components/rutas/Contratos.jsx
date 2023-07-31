@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 // Helpers
 import { helpHttp } from "../../helpers/helpHttp";
@@ -200,4 +200,4 @@ const Contratos = () => {
   );
 };
 
-export default Contratos;
+export default memo(() => Contratos());

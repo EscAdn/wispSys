@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Formik, Form } from 'formik';
+import * as Yup from "yup";
 
+// Components
 import ButtonsForm from "../../extras/ButtonsForm";
 import Input from "../../extras/Input";
 import Select from "../../extras/Select";
@@ -7,14 +10,11 @@ import Select from "../../extras/Select";
 const initialForm = {
   id: null,
   concept: "",
-  payment_type_id: 0,
-  client_name: "",
-  amount_incomes: 0,
+  amount_income: 0,
   amount_discharge: 0,
 };
 
-const Form = ({
-  payments_types,
+const Formulario = ({
   createData,
   updateData,
   dataToEdit,
@@ -30,51 +30,51 @@ const Form = ({
     }
   }, [dataToEdit]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values, actions) => {
+    let respuesta = {};
 
-    if (form.id === null) {
-      createData(form);
+    if (!values.id) {
+      respuesta = await createData(values);
     } else {
-      updateData(form);
+      respuesta = await updateData(values);
     }
 
-    handleReset(e);
+    if(!respuesta){
+      actions.resetForm();
+      setDataToEdit(false);
+    }
   };
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleReset = (e) => {
-    setForm(initialForm);
-    setDataToEdit(null);
-  };
+  const validate =  Yup.object({
+    concept: Yup.string().required("Obligatorio"),
+    client_name: Yup.string().typeError("Ingrese un cliente valido"),
+    amount_incomes: Yup.number().typeError("Debe ser un número"),
+    amount_discharge: Yup.number().typeError("Debe ser un número"),
+  });
 
   return (
-    <div className="col-sm-12">
-      <form className="text-center p-4" onSubmit={handleSubmit}>
+    <Formik 
+      className="col-sm-12"
+      enableReinitialize={true}
+      onSubmit={handleSubmit}
+      initialValues={form}
+      onReset={() => {}}
+      validationSchema={validate}
+    >
+      <Form className="text-center px-4 pt-1">
         <h5 className="card-header bg-white">
           <span className="h4 fw-bold">
             {dataToEdit ? "Modificar" : "Registrar"}
           </span>
         </h5>
         <div className="card-body">
-          <Select
-            data={payments_types}
-            label="Recibido por..."
-            name="payment_type_id"
-            onChange={handleChange}
-            value={form.payment_type_id}
+          <Input
+            label="Concepto"
+            name="concept"
           />
           <Input
             label="Ingreso"
-            name="amount_incomes"
-            onChange={handleChange}
-            value={form.amount_incomes}
+            name="amount_income"
             type="number"
             step="10"
             min="0"
@@ -82,24 +82,15 @@ const Form = ({
           <Input
             label="Egreso"
             name="amount_discharge"
-            onChange={handleChange}
-            value={form.amount_discharge}
             type="number"
             step="50"
             min="0"
-            max="1000"
-          />
-          <Input
-            label="Concepto"
-            name="concept"
-            onChange={handleChange}
-            value={form.concept}
           />
         </div>
-        <ButtonsForm onClick={handleReset} dataToEdit={dataToEdit} />
-      </form>
-    </div>
+        <ButtonsForm setDataToEdit={setDataToEdit} dataToEdit={dataToEdit} />
+      </Form>
+    </Formik>
   );
 };
 
-export default Form;
+export default Formulario;

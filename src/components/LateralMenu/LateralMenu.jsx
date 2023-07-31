@@ -36,7 +36,7 @@ export const LateralMenu = () => {
         </li>
         <li>
           <NavLink to="/clients">
-            <i className="fas fa-user-alt"></i>
+            <i className="fas fa-users-between-lines"></i>
             <span className="links_name">Clientes</span>
           </NavLink>
           <span className="tooltip">Clientes</span>
@@ -63,11 +63,39 @@ export const LateralMenu = () => {
           <span className="tooltip">Gastos</span>
         </li>
         <li>
-          <NavLink to="/config">
-            <i className="fas fa-user-cog"></i>
-            <span className="links_name">ISP</span>
+          <NavLink to="/types">
+            <i className="fas fa-cash-register"></i>
+            <span className="links_name">Formas de Pagos</span>
           </NavLink>
-          <span className="tooltip">ISP</span>
+          <span className="tooltip">Formas de Pagos</span>
+        </li>
+        <li>
+          <NavLink to="config">
+            <i className="fas fa-location-dot"></i>
+            <span className="links_name">Direcciones</span>
+          </NavLink>
+          <span className="tooltip">Direcciones</span>
+        </li>
+        {/*<li>
+          <NavLink to="/address">
+            <i className="fas fa-location-dot"></i>
+            <span className="links_name">Direcciones</span>
+          </NavLink>
+          <span className="tooltip">Direcciones</span>
+        </li>*/}
+        {/*<li>
+          <NavLink to="/nodes">
+            <i className="fas fa-circle-nodes"></i>
+            <span className="links_name">Nodos</span>
+          </NavLink>
+          <span className="tooltip">Nodos</span>
+        </li>*/}
+        <li>
+          <NavLink to="/nodes">
+            <i className="fas fa-users-gear"></i>
+            <span className="links_name">Usuarios</span>
+          </NavLink>
+          <span className="tooltip">Usuarios</span>
         </li>
       </ul>
     </div>

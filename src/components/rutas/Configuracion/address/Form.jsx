@@ -12,7 +12,6 @@ const Formulario = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
   const [form, setForm] = useState(initialForm);
 
   useEffect(() => {
-    console.log("Formulario Addresses")
     if (dataToEdit) {
       setForm({ ...dataToEdit });
     } else {

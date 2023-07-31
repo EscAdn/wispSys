@@ -5,13 +5,14 @@ import "./index.css";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Configuracion from "./components/rutas/Configuracion";
-import Planes from "./components/rutas/Planes";
+import Inicio from "./components/rutas/Inicio";
 import Clientes from "./components/rutas/Clientes";
 import Contratos from "./components/rutas/Contratos";
-import Invoices from "./components/rutas/Invoices";
+import Planes from "./components/rutas/Planes";
 import Gastos from "./components/rutas/Gastos";
-import { Inicio } from "./components/rutas/Inicio";
+import Invoices from "./components/rutas/Invoices";
+import TiposPagos from './components/rutas/TiposPagos';
+import Configuracion from "./components/rutas/Configuracion";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -21,8 +22,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="clients" element={<Clientes />} />
         <Route path="contracts" element={<Contratos />} />
         <Route path="plans" exact element={<Planes />} />
-        <Route path="invoices" element={<Invoices />} />
+        {/*<Route path="invoices" element={<Invoices />} />*/}
         <Route path="gastos" element={<Gastos />} />
+        <Route path="types" element={<TiposPagos />} />
         <Route path="config" element={<Configuracion />} />
       </Route>
     </Routes>

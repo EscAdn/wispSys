@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { helpHttp } from "../../helpers/helpHttp";
 import { urls } from "../../utils/endpoints";
@@ -10,7 +10,7 @@ import Message from "../extras/Message";
 import Table from "./Invoices/Table";
 import Loading from "../extras/Loading";
 
-export const Inicio = () => {
+const Inicio = () => {
   const [db, setDb] = useState(null);
   const [error, setError] = useState(null);
 
@@ -53,3 +53,5 @@ export const Inicio = () => {
     </>
   );
 };
+
+export default memo( () => Inicio());

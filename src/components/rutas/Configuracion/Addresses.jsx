@@ -1,4 +1,4 @@
-import { useEffect, useState, memo } from 'react'
+import { useState, memo } from 'react'
 // Helpers
 import { helpHttp } from "../../../helpers/helpHttp";
 
@@ -12,9 +12,6 @@ import Table from "./address/Table";
 const Addresses = ({ url = "", db, setDb, dataToEdit, setDataToEdit, error }) => {
   const [respError, setRespError] = useState(false);
 
-  useEffect(() => {
-    console.log("Adddress Component")
-  }, [])
   // Nuevo registro
   const createData = async (data) => {
     delete data.id;
