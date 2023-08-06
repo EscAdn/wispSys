@@ -9,8 +9,10 @@ import Card from "./../extras/Card";
 import Message from "../extras/Message";
 import Table from "./Invoices/Table";
 import Loading from "../extras/Loading";
+import Modal from "../extras/Modal";
 
 const Inicio = () => {
+  const [estado, setEstado] = useState(false);
   const [db, setDb] = useState(null);
   const [error, setError] = useState(null);
 
@@ -26,7 +28,7 @@ const Inicio = () => {
   };
 
   useEffect(() => {
-    getData();
+    // getData();
   }, []);
 
   if (error) {
@@ -40,7 +42,11 @@ const Inicio = () => {
   return (
     <>
       <Header title="Inicio" />
-      {db ? (
+      <button onClick={() => setEstado(!estado)}>Modal</button>
+      <Modal titulo="Generar Factura" estado={estado} cambiarEstado={setEstado}>
+        <Loading />
+      </Modal>
+      {/*{db ? (
         <Layout>
           <Card md="col-md-3">Tareas Pendientes</Card>
           <Card md="col-md-9">
@@ -49,7 +55,7 @@ const Inicio = () => {
         </Layout>
       ) : (
         <Loading />
-      )}
+      )}*/}
     </>
   );
 };

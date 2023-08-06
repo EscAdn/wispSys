@@ -82,6 +82,9 @@ const Gastos = () => {
             />
           </Card>
           <Card md="col-md-8">
+              <h4 className="my-0 pt-2 text-center">
+                Total: $ 120.53 MNX
+              </h4>
               <Table data={db} setDataToEdit={setDataToEdit} />
           </Card>
         </Layout>

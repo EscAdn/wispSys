@@ -1,5 +1,4 @@
 const Table = ({ data, setDataToEdit }) => {
-  console.log(data)
   return (
     <div className="mt-4 col-12 p-2 h-max scroll overflow-auto">
       <table className="table table-responsive table-hover shadow p-3 mb-3 bg-body">
@@ -15,9 +14,9 @@ const Table = ({ data, setDataToEdit }) => {
         <tbody>
           {data.map((e) => (
             <tr key={e.id}>
-              <td>{e.created_at}</td>
+              <td>{e.date.substring(0, 10)}</td>
               <td>{e.concept}{e.client_name}</td>
-              <td>{e.amount_incomes}</td>
+              <td>{e.amount_income}</td>
               <td>{e.amount_discharge}</td>
               <td>
                 <button

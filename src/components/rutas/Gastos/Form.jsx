@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Formik, Form } from 'formik';
 import * as Yup from "yup";
 
+// import {formatoFecha} from './../../../helpers/helpDate.js'
 // Components
 import ButtonsForm from "../../extras/ButtonsForm";
 import Input from "../../extras/Input";
@@ -9,9 +10,10 @@ import Select from "../../extras/Select";
 
 const initialForm = {
   id: null,
+  date: new Date().toJSON().slice(0, 10),
   concept: "",
-  amount_income: 0,
-  amount_discharge: 0,
+  amount_income: 0.0,
+  amount_discharge: 0.0,
 };
 
 const Formulario = ({
@@ -46,6 +48,7 @@ const Formulario = ({
   };
 
   const validate =  Yup.object({
+    date: Yup.string().required("Obligatorio"),
     concept: Yup.string().required("Obligatorio"),
     client_name: Yup.string().typeError("Ingrese un cliente valido"),
     amount_incomes: Yup.number().typeError("Debe ser un número"),
@@ -69,6 +72,11 @@ const Formulario = ({
         </h5>
         <div className="card-body">
           <Input
+            label="Fecha"
+            name="date"
+            type="date"
+          />
+          <Input
             label="Concepto"
             name="concept"
           />
@@ -76,15 +84,15 @@ const Formulario = ({
             label="Ingreso"
             name="amount_income"
             type="number"
-            step="10"
+            step="0.50"
             min="0"
           />
           <Input
             label="Egreso"
             name="amount_discharge"
             type="number"
-            step="50"
-            min="0"
+            step="0.50"
+            min="0.00"
           />
         </div>
         <ButtonsForm setDataToEdit={setDataToEdit} dataToEdit={dataToEdit} />
